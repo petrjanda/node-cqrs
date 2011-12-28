@@ -9,6 +9,20 @@ describe('Aggregate', function(){
   })
 
 
+  describe('.emit', function() {
+    
+    it( 'should emit event to event bus', function() {
+      var aggregate = new Aggregate(1);
+      spyOn( EventBus, 'storeEvent' );
+      
+      aggregate.emit( 'foo', {foo: 'bar'} );
+
+      expect( EventBus.storeEvent ).toHaveBeenCalledWith( 'foo', 1, {foo: 'bar'} );
+    })
+
+  })
+
+
   describe('.constructor', function() {
 
 
