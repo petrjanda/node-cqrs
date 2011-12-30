@@ -6,7 +6,11 @@ describe('couchdb', function() {
   var couchdb;
 
   beforeEach(function() {
-    couchdb = new CouchDb();
+    couchdb = new CouchDb('cqrs');
+  })
+
+  it('should store database name', function() {
+    expect(couchdb.database).toEqual('cqrs');
   })
 
   it('host should be default to localhost', function() {
@@ -15,6 +19,18 @@ describe('couchdb', function() {
 
   it('port should be default to localhost', function() {
     expect(couchdb.options.port).toEqual(5984);
+  })
+
+  describe('createDocument', function() {
+    it('should call proper request', function() {
+      var data = JSON.stringify({ foo: 'bar' }),
+      options = { path: '/cqrs/foo', method: 'PUT', data: data };
+      spyOn(couchdb, 'request');
+
+      couchdb.createDocument(data)
+
+      expect(couchdb.request).toHaveBeenCalledWith(options);
+    })
   })
 
   describe('request', function() {
@@ -73,8 +89,12 @@ describe('couchdb', function() {
       couchdb.request({data: 'foo'});
 
       expect(req.write).toHaveBeenCalledWith('foo');
-    });    
+    });  
+    
+    describe('response', function() {
+      
+      it('')
 
-  })
-
+    });  
+  });
 });
