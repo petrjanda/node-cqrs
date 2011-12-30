@@ -22,7 +22,8 @@ describe('couchdb', function() {
 
     beforeEach(function() {
       req = Object.create({
-        end: function() {}
+        end: function() {},
+        write: function() {}
       });
 
       spyOn(http, 'request').andReturn(req);
@@ -36,7 +37,7 @@ describe('couchdb', function() {
 
     it('should setup proper default options', function() {
       couchdb.options = {};
-      
+
       couchdb.request();
 
       expect(http.request).toHaveBeenCalledWith({method: 'GET', path: '/'}, jasmine.any(Function));
@@ -58,13 +59,21 @@ describe('couchdb', function() {
       expect(http.request).toHaveBeenCalledWith({method: 'GET', path: '/foo'}, jasmine.any(Function));
     }) 
 
-    it('should write data to request and end it', function() {
+    it('should end request', function() {
       spyOn(req, 'end');
 
       couchdb.request();
 
       expect(req.end).toHaveBeenCalled();
     });
+
+    it('should write data to request if specified', function() {
+      spyOn(req, 'write');
+
+      couchdb.request({data: 'foo'});
+
+      expect(req.write).toHaveBeenCalledWith('foo');
+    });    
 
   })
 

@@ -1,140 +1,140 @@
-var Aggregate = require('../lib/aggregate'),
-    EventBus = require('../lib/eventBus'),
-    jasmine = require('jasmine-node');
+// var Aggregate = require('../lib/aggregate'),
+//     EventBus = require('../lib/eventBus'),
+//     jasmine = require('jasmine-node');
 
-describe('Aggregate', function(){
+// describe('Aggregate', function(){
   
-  beforeEach(function() {
-    EventBus.storeSnapshot = function() {};
-  })
+//   beforeEach(function() {
+//     EventBus.storeSnapshot = function() {};
+//   })
 
 
-  describe('.emit', function() {
+//   describe('.emit', function() {
     
-    it( 'should emit event to event bus', function() {
-      var aggregate = new Aggregate(1);
-      spyOn( EventBus, 'storeEvent' );
+//     it( 'should emit event to event bus', function() {
+//       var aggregate = new Aggregate(1);
+//       spyOn( EventBus, 'storeEvent' );
       
-      aggregate.emit( 'foo', {foo: 'bar'} );
+//       aggregate.emit( 'foo', {foo: 'bar'} );
 
-      expect( EventBus.storeEvent ).toHaveBeenCalledWith( 'foo', 1, {foo: 'bar'} );
-    })
+//       expect( EventBus.storeEvent ).toHaveBeenCalledWith( 'foo', 1, {foo: 'bar'} );
+//     })
 
-  })
-
-
-  describe('.constructor', function() {
+//   })
 
 
-    it( 'should load data from event bus', function() {
-      spyOn(EventBus, 'loadData');
-
-      var aggregate = new Aggregate(1)
-
-      expect( EventBus.loadData ).toHaveBeenCalledWith( 1, jasmine.any(Function) );
-    })
+//   describe('.constructor', function() {
 
 
-    describe( 'load data callback', function() {
-      var aggregate = null,
-          foo = { foo: 'bar' };
+//     it( 'should load data from event bus', function() {
+//       spyOn(EventBus, 'loadData');
 
-      it( 'should not call init, if no snapshot is ready', function() {
-        runs(function() {
-          EventBus.loadData = function( id, callback ) {
-            setTimeout(function() {
-              callback( null, [], null );
-            }, 10);
-          }
+//       var aggregate = new Aggregate(1)
 
-          this.aggregate = new Aggregate( 1 );
-          spyOn( this.aggregate, 'init' );
-        })
-
-        waits(15);
-
-        runs(function() {
-          expect( this.aggregate.init ).not.toHaveBeenCalled();        
-        })
-      })
+//       expect( EventBus.loadData ).toHaveBeenCalledWith( 1, jasmine.any(Function) );
+//     })
 
 
-      it( 'should call init, if snapshot is ready', function() {
-        runs(function() {
-          EventBus.loadData = function( id, callback ) {
-            setTimeout(function() {
-              callback( foo, [], null );
-            }, 10);
-          }
+//     describe( 'load data callback', function() {
+//       var aggregate = null,
+//           foo = { foo: 'bar' };
+
+//       it( 'should not call init, if no snapshot is ready', function() {
+//         runs(function() {
+//           EventBus.loadData = function( id, callback ) {
+//             setTimeout(function() {
+//               callback( null, [], null );
+//             }, 10);
+//           }
+
+//           this.aggregate = new Aggregate( 1 );
+//           spyOn( this.aggregate, 'init' );
+//         })
+
+//         waits(15);
+
+//         runs(function() {
+//           expect( this.aggregate.init ).not.toHaveBeenCalled();        
+//         })
+//       })
+
+
+//       it( 'should call init, if snapshot is ready', function() {
+//         runs(function() {
+//           EventBus.loadData = function( id, callback ) {
+//             setTimeout(function() {
+//               callback( foo, [], null );
+//             }, 10);
+//           }
           
-          this.aggregate = new Aggregate( 1 );
-          spyOn( this.aggregate, 'init' );
-        })
+//           this.aggregate = new Aggregate( 1 );
+//           spyOn( this.aggregate, 'init' );
+//         })
 
-        waits(15);
+//         waits(15);
 
-        runs(function() {
-          expect( this.aggregate.init ).toHaveBeenCalledWith( foo );  
-        })
-      })
-
-
-      it( 'should call apply, for all events', function() {
-        runs(function() {
-          EventBus.loadData = function( id, callback ) {
-            setTimeout(function() {
-              callback( null, [ foo ], null );
-            }, 10);
-          }
-
-          this.aggregate = new Aggregate( 1 );
-          spyOn( this.aggregate, 'apply' );
-        })
-
-        waits(15);
-
-        runs(function() {
-          expect( this.aggregate.apply ).toHaveBeenCalledWith( foo );  
-        })
-      })
+//         runs(function() {
+//           expect( this.aggregate.init ).toHaveBeenCalledWith( foo );  
+//         })
+//       })
 
 
-      it( 'should call store snapshot', function() {
-        runs(function() {
-          EventBus.loadData = function( id, callback ) {
-            setTimeout(function() {
-              callback( null, [ foo ], 1 );
-            }, 10);
-          }
+//       it( 'should call apply, for all events', function() {
+//         runs(function() {
+//           EventBus.loadData = function( id, callback ) {
+//             setTimeout(function() {
+//               callback( null, [ foo ], null );
+//             }, 10);
+//           }
 
-          this.aggregate = new Aggregate( 1 );
-          spyOn( EventBus, 'storeSnapshot' );
-          spyOn( this.aggregate, 'snapshot' ).andReturn( foo );
-        })
+//           this.aggregate = new Aggregate( 1 );
+//           spyOn( this.aggregate, 'apply' );
+//         })
 
-        waits(15);
+//         waits(15);
 
-        runs(function() {
-          expect( EventBus.storeSnapshot ).toHaveBeenCalledWith( 1, 1, foo );  
-        })
-      })
+//         runs(function() {
+//           expect( this.aggregate.apply ).toHaveBeenCalledWith( foo );  
+//         })
+//       })
 
 
-      it( 'should call callback if specified', function() {
-        this.handler = function() {}
+//       it( 'should call store snapshot', function() {
+//         runs(function() {
+//           EventBus.loadData = function( id, callback ) {
+//             setTimeout(function() {
+//               callback( null, [ foo ], 1 );
+//             }, 10);
+//           }
 
-        EventBus.loadData = function( id, callback ) {
-          callback( null, [ foo ], 1 );
-        }
+//           this.aggregate = new Aggregate( 1 );
+//           spyOn( EventBus, 'storeSnapshot' );
+//           spyOn( this.aggregate, 'snapshot' ).andReturn( foo );
+//         })
 
-        spyOn( this, 'handler')
-        this.aggregate = new Aggregate( 1, this.handler );
+//         waits(15);
 
-        expect( this.handler ).toHaveBeenCalled();  
-      })
+//         runs(function() {
+//           expect( EventBus.storeSnapshot ).toHaveBeenCalledWith( 1, 1, foo );  
+//         })
+//       })
+
+
+//       it( 'should call callback if specified', function() {
+//         this.handler = function() {}
+
+//         EventBus.loadData = function( id, callback ) {
+//           callback( null, [ foo ], 1 );
+//         }
+
+//         spyOn( this, 'handler')
+//         this.aggregate = new Aggregate( 1, this.handler );
+
+//         expect( this.handler ).toHaveBeenCalled();  
+//       })
       
-    })
+//     })
 
-  })
+//   })
 
-}) 
+// }) 
