@@ -25,6 +25,28 @@ describe('couchdb', function() {
     })    
   })
 
+  describe('storeEvent', function() {
+    it('should call create document', function() {
+      spyOn(couchdb, 'createDocument');
+
+      couchdb.storeEvent(1, 'user:created', {foo: 'bar'});
+
+      expect(couchdb.createDocument).toHaveBeenCalledWith({
+        aggregateId: 1,
+        name: 'user:created',
+        attrs: {foo: 'bar'}
+      });
+    })
+  })
+
+  describe('getEventsByAggregate', function() {
+    
+  })
+
+  describe('getEventsByType', function() {
+    
+  })
+
   describe('createDocument', function() {
     it('should call proper request', function() {
       var callback = function() {},
