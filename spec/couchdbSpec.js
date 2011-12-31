@@ -29,17 +29,16 @@ describe('couchdb', function() {
     it('should call proper request', function() {
       var callback = function() {},
           data = JSON.stringify({ foo: 'bar' }),
-          options = { path: '/cqrs/1234', method: 'PUT', data: data },
-          couchdbGetUuid = couchdb.getUuid;
+          options = { path: '/cqrs/1234', method: 'PUT', data: data };
 
-      couchdb.getUuid = function(callback) { callback('1234'); }
       spyOn(couchdb, 'request');
+      spyOn(couchdb, 'getUuid').andCallFake(function(callback) {
+        callback('1234');
+      })
       
       couchdb.createDocument(data, callback);
 
       expect(couchdb.request).toHaveBeenCalledWith(options, callback);
-
-      couchdb.getUuid = couchdbGetUuid;
     })
   })
 
@@ -72,7 +71,7 @@ describe('couchdb', function() {
   })
 
   describe('request', function() {
-    var req;
+    var req, res;
 
     beforeEach(function() {
       req = Object.create({
@@ -80,7 +79,13 @@ describe('couchdb', function() {
         write: function() {}
       });
 
-      spyOn(http, 'request').andReturn(req);
+      res = new EventEmitter();
+
+      var s = spyOn(http, 'request').andReturn(req);     
+      s.andCallFake(function(params, callback) {
+        callback(res);
+        return req;
+      })
     })
 
     it('should call http.request with valid params', function() {
@@ -130,23 +135,6 @@ describe('couchdb', function() {
     });  
     
     describe('response', function() {
-      var res, httpRequest;
-
-      beforeEach(function() {
-        res = new EventEmitter();
-
-        httpRequest = http.request;
-
-        http.request = function(params, callback) {
-          callback(res);
-          return req;
-        };
-      })
-
-      afterEach(function() {
-        http.request = httpRequest;
-      })
-
       it('should register handler for data event', function() {
         spyOn(res, 'on');
 
