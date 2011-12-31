@@ -2,6 +2,4 @@ var CouchDb = require('../lib/couchdb');
 
 var couchdb = new CouchDb();
 
-couchdb.getUuid(function(data) {
-  console.log(data);
-});
+couchdb.storeEvent(1, 'account:opened', {number: '35-439598'});

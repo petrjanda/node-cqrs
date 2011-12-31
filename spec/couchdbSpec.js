@@ -31,11 +31,11 @@ describe('couchdb', function() {
 
       couchdb.storeEvent(1, 'user:created', {foo: 'bar'});
 
-      expect(couchdb.createDocument).toHaveBeenCalledWith({
+      expect(couchdb.createDocument).toHaveBeenCalledWith(JSON.stringify({
         aggregateId: 1,
         name: 'user:created',
         attrs: {foo: 'bar'}
-      });
+      }));
     })
   })
 
@@ -174,6 +174,12 @@ describe('couchdb', function() {
         res.emit('end', 'foo');
 
         expect(foo.callback).toHaveBeenCalledWith('foo');
+      })
+
+      it('dont require callback to be specified', function() {
+        couchdb.request({});
+
+        res.emit('end', 'foo');
       })
 
       it('should call store data into buffer', function() {
