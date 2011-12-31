@@ -24,14 +24,19 @@ describe('couchdb', function() {
 
   describe('createDocument', function() {
     it('should call proper request', function() {
-      var data = JSON.stringify({ foo: 'bar' }),
-      options = { path: '/cqrs/1234', method: 'PUT', data: data };
+      var callback = function() {},
+          data = JSON.stringify({ foo: 'bar' }),
+          options = { path: '/cqrs/1234', method: 'PUT', data: data },
+          couchdbGetUuid = couchdb.getUuid;
+
+      couchdb.getUuid = function(callback) { callback('1234'); }
       spyOn(couchdb, 'request');
-      spyOn(couchdb, 'getUuid').andReturn('1234');
+      
+      couchdb.createDocument(data, callback);
 
-      couchdb.createDocument(data);
+      expect(couchdb.request).toHaveBeenCalledWith(options, callback);
 
-      expect(couchdb.request).toHaveBeenCalledWith(options);
+      couchdb.getUuid = couchdbGetUuid;
     })
   })
 
@@ -43,9 +48,23 @@ describe('couchdb', function() {
       };
       spyOn(couchdb, 'request');
 
-      couchdb.getUuid();
+      couchdb.getUuid(function() {});
 
-      expect(couchdb.request).toHaveBeenCalledWith(options);
+      expect(couchdb.request).toHaveBeenCalledWith(options, jasmine.any(Function));
+    })
+
+    it('it should parse value and call callback', function() {
+      var foo = { callback: function() {} },
+          couchdbRequest = couchdb.request;
+
+      couchdb.request = function(options, callback) {
+        callback('{"uuids":["a45287db79779654689b4df73a00087a"]}');
+      }
+      spyOn(foo, 'callback');
+
+      couchdb.getUuid(foo.callback);
+
+      expect(foo.callback).toHaveBeenCalledWith('a45287db79779654689b4df73a00087a');
     })
   })
 
