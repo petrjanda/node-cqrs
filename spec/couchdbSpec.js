@@ -1,6 +1,7 @@
 var http = require('http'),
     jasmine = require('jasmine-node'),
-    CouchDb = require('../lib/couchdb');
+    CouchDb = require('../lib/couchdb'),
+    EventEmitter = require('events').EventEmitter;
 
 describe('couchdb', function() {
   var couchdb;
@@ -24,10 +25,25 @@ describe('couchdb', function() {
   describe('createDocument', function() {
     it('should call proper request', function() {
       var data = JSON.stringify({ foo: 'bar' }),
-      options = { path: '/cqrs/foo', method: 'PUT', data: data };
+      options = { path: '/cqrs/1234', method: 'PUT', data: data };
+      spyOn(couchdb, 'request');
+      spyOn(couchdb, 'getUuid').andReturn('1234');
+
+      couchdb.createDocument(data);
+
+      expect(couchdb.request).toHaveBeenCalledWith(options);
+    })
+  })
+
+  describe('getUuid', function() {
+    it('should call proper request', function() {
+      var options = {
+        path: '/_uuids', 
+        method: 'GET', 
+      };
       spyOn(couchdb, 'request');
 
-      couchdb.createDocument(data)
+      couchdb.getUuid();
 
       expect(couchdb.request).toHaveBeenCalledWith(options);
     })
@@ -92,8 +108,52 @@ describe('couchdb', function() {
     });  
     
     describe('response', function() {
-      
-      it('')
+      var res, httpRequest;
+
+      beforeEach(function() {
+        res = new EventEmitter();
+
+        httpRequest = http.request;
+
+        http.request = function(params, callback) {
+          callback(res);
+          return req;
+        };
+      })
+
+      afterEach(function() {
+        http.request = httpRequest;
+      })
+
+      it('should register handler for data event', function() {
+        spyOn(res, 'on');
+
+        couchdb.request();
+
+        expect(res.on).toHaveBeenCalledWith('data', jasmine.any(Function));
+        expect(res.on).toHaveBeenCalledWith('end', jasmine.any(Function));
+      })
+
+      it('should call callback if response ends', function() {
+        var foo = { callback: function() {} };
+        spyOn(foo, 'callback');
+        couchdb.request({}, foo.callback);
+
+        res.emit('end', 'foo');
+
+        expect(foo.callback).toHaveBeenCalledWith('foo');
+      })
+
+      it('should call store data into buffer', function() {
+        var foo = { callback: function() {} };
+        spyOn(foo, 'callback');
+        couchdb.request({}, foo.callback);
+
+        res.emit('data', 'foo');
+        res.emit('end', '');
+
+        expect(foo.callback).toHaveBeenCalledWith('foo');
+      })
 
     });  
   });
