@@ -58,7 +58,7 @@ describe('couchdb', function() {
           couchdbRequest = couchdb.request;
 
       couchdb.request = function(options, callback) {
-        callback('{"uuids":["a45287db79779654689b4df73a00087a"]}');
+        callback('{"uuids":["a45287db79779654689b4df73a00087a"]}\nundefined');
       }
       spyOn(foo, 'callback');
 
