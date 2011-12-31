@@ -10,16 +10,19 @@ describe('couchdb', function() {
     couchdb = new CouchDb('cqrs');
   })
 
-  it('should store database name', function() {
-    expect(couchdb.database).toEqual('cqrs');
-  })
+  describe('constructor', function() {
 
-  it('host should be default to localhost', function() {
-    expect(couchdb.options.host).toEqual('localhost');
-  })
+    it('should store database name', function() {
+      expect(couchdb.database).toEqual('cqrs');
+    })
 
-  it('port should be default to localhost', function() {
-    expect(couchdb.options.port).toEqual(5984);
+    it('host should be default to localhost', function() {
+      expect(couchdb.options.host).toEqual('localhost');
+    })
+
+    it('port should be default to localhost', function() {
+      expect(couchdb.options.port).toEqual(5984);
+    })    
   })
 
   describe('createDocument', function() {
