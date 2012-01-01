@@ -28,12 +28,15 @@ describe('couchdb', function() {
   describe('storeEvent', function() {
     it('should call create document', function() {
       spyOn(couchdb, 'createDocument');
+      spyOn(Date.prototype, 'getTime').andCallFake(function() { return 123456; })
 
       couchdb.storeEvent(1, 'user:created', {foo: 'bar'});
 
       expect(couchdb.createDocument).toHaveBeenCalledWith(JSON.stringify({
         aggregateId: 1,
         name: 'user:created',
+        type: 'event',
+        time: 123456,
         attrs: {foo: 'bar'}
       }));
     })

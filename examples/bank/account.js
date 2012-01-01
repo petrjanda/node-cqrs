@@ -26,18 +26,18 @@ Account.prototype.deposit = function( amount ) {
 }
 
 Account.prototype.apply = function( event ) {
-
+  console.log(event);
   switch(event.name) {
     case 'accountCreated':
       this._balance = 0;
       break;
 
     case 'moneyDeposited':
-      this._balance += parseFloat(event.attributes.amount);
+      this._balance += parseFloat(event.attrs.amount);
       break;
 
     case 'moneyWithdrawn':
-      this._balance -= parseFloat(event.attributes.amount);
+      this._balance -= parseFloat(event.attrs.amount);
       break;
   }
 }
@@ -46,13 +46,13 @@ Account.prototype.apply = function( event ) {
 // ACTIONS
 //
 
-Account.prototype.init = function( data ) {
-  this._balance = data.balance;
-}
+// Account.prototype.init = function( data ) {
+//   this._balance = data.balance;
+// }
 
-Account.prototype.snapshot = function() {
-  return { balance: this._balance };
-}
+// Account.prototype.snapshot = function() {
+//   return { balance: this._balance };
+// }
 
 Account.create = function( id ) {
   var account = new Account( id );
