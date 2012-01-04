@@ -1,4 +1,5 @@
 var util = require('util'),
+    db = require('../lib/couchdb').getInstance(),
     Aggregate = require('../lib/aggregate')
 
 var Foo = function(id, callback) {
@@ -22,4 +23,8 @@ var foo = new Foo(1, function() {
   console.log(this.sentence);
 })
 
-foo.emit('foobar', {foo: 'bar'})
+foo.emit('foobar', {foo: 'bar'});
+
+db.getEventsByType('foobar', function(events) {
+  console.log(events);
+})
