@@ -10,6 +10,22 @@ describe('couchdb', function() {
     couchdb = new CouchDb('cqrs');
   })
 
+  describe('instance', function() {
+    it('should get instance of couchdb', function() {
+      var couchdb = CouchDb.getInstance()
+      expect(typeof couchdb.request).toEqual('function');
+    })
+
+    it('should return just one instance', function() {
+      var couch1 = CouchDb.getInstance(),
+          couch2 = CouchDb.getInstance();
+
+      couch1.database = 'foobar';
+
+      expect(couch2.database).toEqual('foobar')
+    })
+  })
+
   describe('constructor', function() {
 
     it('should store database name', function() {

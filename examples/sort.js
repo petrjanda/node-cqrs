@@ -14,4 +14,3 @@ var time = new Date().getTime() - start;
 console.log(time + " ms");
 
 
-// http://en.literateprograms.org/Merge_sort_%28JavaScript%29
