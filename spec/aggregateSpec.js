@@ -1,3 +1,48 @@
+var util = require('util'),
+    db = require('../lib/couchDb').getInstance(),
+    Aggregate = require('../lib/aggregate');
+
+describe('Aggregate', function() {
+  
+  describe('.apply', function() {
+
+    var Foo;
+
+    beforeEach(function() {
+      Foo = function(id, callback) {
+        Aggregate.call(this, id, callback);
+      }
+
+      util.inherits(Foo, Aggregate);
+
+      spyOn(db, 'getEventsByAggregate').andCallFake(function(id, callback) {
+        callback([]);
+      });      
+    })
+
+    it('should call raise error if handler is missing', function() {
+      var foo = new Foo(1),
+          event = {name: 'foo'};
+
+      expect(function(){ foo.apply(event) }).toThrow('There is no handler for \'Foo\' event!');
+    })
+
+    it('shoud call appropriate handler', function() {
+      Foo.prototype.onFoo = function() {}
+
+      var foo = new Foo(1),
+          event = {name: 'foo'};
+      console.log(foo);
+      spyOn(foo, 'onFoo');
+
+      foo.apply(event);
+
+      expect(foo.onFoo).toHaveBeenCalledWith(event);
+    })
+  })
+
+})
+
 // var Aggregate = require('../lib/aggregate'),
 //     EventBus = require('../lib/eventBus'),
 //     jasmine = require('jasmine-node');

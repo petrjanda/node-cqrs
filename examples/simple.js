@@ -1,5 +1,5 @@
 var util = require('util'),
-    db = require('../lib/couchdb').getInstance(),
+    View = require('../lib/view'),
     Aggregate = require('../lib/aggregate')
 
 var Foo = function(id, callback) {
@@ -19,12 +19,29 @@ Foo.prototype.apply = function(event) {
 }
 
 var foo = new Foo(1, function() {
-  console.log('Ready!');
-  console.log(this.sentence);
+//  console.log('Ready!');
+//  console.log(this.sentence);
 })
 
-foo.emit('foobar', {foo: 'bar'});
+// for(var i = 0; i < 1000; i++) {
+//  foo.emit('foobar', {foo: 'bar'});
+// }
 
-db.getEventsByType('foobar', function(events) {
-  console.log(events);
-})
+
+var FooView = function() {
+  View.call(this, 'foobar', this.ready);
+
+  this.count = 0;
+}
+
+util.inherits(FooView, View);
+
+FooView.prototype.apply = function(event) {
+  this.count++
+}
+
+FooView.prototype.ready = function() {
+  console.log('Current count:' + this.count); 
+}
+
+var view = new FooView();
