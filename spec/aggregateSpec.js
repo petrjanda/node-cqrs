@@ -3,42 +3,52 @@ var util = require('util'),
     Aggregate = require('../lib/aggregate');
 
 describe('Aggregate', function() {
+
+  var Foo, foo;
+
+  beforeEach(function() {
+    Foo = function(id, callback) {
+      Aggregate.call(this, id, callback);
+    }
+
+    util.inherits(Foo, Aggregate);
+
+    spyOn(db, 'getEventsByAggregate').andCallFake(function(id, callback) {
+      callback([]);
+    });      
+
+    foo = new Foo(1);
+  })
   
   describe('.apply', function() {
 
-    var Foo;
-
-    beforeEach(function() {
-      Foo = function(id, callback) {
-        Aggregate.call(this, id, callback);
-      }
-
-      util.inherits(Foo, Aggregate);
-
-      spyOn(db, 'getEventsByAggregate').andCallFake(function(id, callback) {
-        callback([]);
-      });      
-    })
-
     it('should call raise error if handler is missing', function() {
-      var foo = new Foo(1),
-          event = {name: 'myEvent'};
+      var event = {name: 'myEvent'};
 
       expect(function(){ foo.apply(event) }).toThrow('There is no handler for \'MyEvent\' event!');
     })
 
     it('shoud call appropriate handler', function() {
+      var event = {name: 'myEvent'};
       Foo.prototype.onMyEvent = function() {}
-
-      var foo = new Foo(1),
-          event = {name: 'myEvent'};
-      
       spyOn(foo, 'onMyEvent');
 
       foo.apply(event);
 
       expect(foo.onMyEvent).toHaveBeenCalledWith(event);
     })
+  })
+
+  describe('.emit', function() {
+    
+    it( 'should store event', function() {
+      spyOn( db, 'storeEvent' );
+      
+      foo.emit( 'foo', {foo: 'bar'} );
+
+      expect( db.storeEvent ).toHaveBeenCalledWith( 1, 'foo', {foo: 'bar'} );
+    })
+
   })
 
 })
