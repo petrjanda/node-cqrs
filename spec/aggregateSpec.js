@@ -22,22 +22,22 @@ describe('Aggregate', function() {
 
     it('should call raise error if handler is missing', function() {
       var foo = new Foo(1),
-          event = {name: 'foo'};
+          event = {name: 'myEvent'};
 
-      expect(function(){ foo.apply(event) }).toThrow('There is no handler for \'Foo\' event!');
+      expect(function(){ foo.apply(event) }).toThrow('There is no handler for \'MyEvent\' event!');
     })
 
     it('shoud call appropriate handler', function() {
-      Foo.prototype.onFoo = function() {}
+      Foo.prototype.onMyEvent = function() {}
 
       var foo = new Foo(1),
-          event = {name: 'foo'};
-      console.log(foo);
-      spyOn(foo, 'onFoo');
+          event = {name: 'myEvent'};
+      
+      spyOn(foo, 'onMyEvent');
 
       foo.apply(event);
 
-      expect(foo.onFoo).toHaveBeenCalledWith(event);
+      expect(foo.onMyEvent).toHaveBeenCalledWith(event);
     })
   })
 
