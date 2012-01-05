@@ -4,7 +4,7 @@ var util = require('util'),
 
 describe('Aggregate', function() {
 
-  var Foo, foo;
+  var Foo, foo, dbGetEventsByAggregateSpy;
 
   beforeEach(function() {
     Foo = function(id, callback) {
@@ -13,11 +13,43 @@ describe('Aggregate', function() {
 
     util.inherits(Foo, Aggregate);
 
-    spyOn(db, 'getEventsByAggregate').andCallFake(function(id, callback) {
+    dbGetEventsByAggregateSpy = spyOn(db, 'getEventsByAggregate').andCallFake(function(id, callback) {
       callback([]);
     });      
 
     foo = new Foo(1);
+  })
+
+  describe('.constructor', function() {
+
+    it( 'should load data from event bus', function() {
+      foo = new Foo(1);
+
+      expect(db.getEventsByAggregate).toHaveBeenCalledWith( 1, jasmine.any(Function) );
+    })
+
+    it( 'should call apply, for all events', function() {
+      var event;
+
+      runs(function() {
+        event = {name: 'myEvent'};
+
+        dbGetEventsByAggregateSpy.andCallFake(function(id, callback) {
+          setTimeout(function() {
+            callback([event]);
+          }, 10);
+        });      
+
+        foo = new Foo(1);
+        spyOn(foo, 'apply');
+      })
+
+      waits(15)
+
+      runs(function() {
+        expect( foo.apply ).toHaveBeenCalledWith( event );    
+      })
+    })
   })
   
   describe('.apply', function() {
@@ -64,30 +96,6 @@ describe('Aggregate', function() {
 //   })
 
 
-//   describe('.emit', function() {
-    
-//     it( 'should emit event to event bus', function() {
-//       var aggregate = new Aggregate(1);
-//       spyOn( EventBus, 'storeEvent' );
-      
-//       aggregate.emit( 'foo', {foo: 'bar'} );
-
-//       expect( EventBus.storeEvent ).toHaveBeenCalledWith( 'foo', 1, {foo: 'bar'} );
-//     })
-
-//   })
-
-
-//   describe('.constructor', function() {
-
-
-//     it( 'should load data from event bus', function() {
-//       spyOn(EventBus, 'loadData');
-
-//       var aggregate = new Aggregate(1)
-
-//       expect( EventBus.loadData ).toHaveBeenCalledWith( 1, jasmine.any(Function) );
-//     })
 
 
 //     describe( 'load data callback', function() {
