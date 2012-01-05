@@ -1,7 +1,7 @@
 {
   "author": "Petr Janda <petrjanda@me.com> (www.twitter.com/petrjanda)",
   "name": "cqrs",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "repository": {
     "type": "git",
     "url": "git://github.com/petrjanda/node-cqrs.git"
@@ -9,6 +9,11 @@
   "engines": {
     "node": "~0.6.2"
   },
+  "scripts": {
+    "test": "./jasmine-node spec/"
+  },
   "dependencies": {},
-  "devDependencies": {}
+  "devDependencies": {
+    "jasmine-node": "*"
+  }
 }
