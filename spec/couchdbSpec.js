@@ -59,7 +59,25 @@ describe('couchdb', function() {
   })
 
   describe('getEventsByAggregate', function() {
-    
+    it('should call request', function() {
+      spyOn(couchdb, 'request');
+
+      couchdb.getEventsByAggregate(1, function() {});
+
+      expect(couchdb.request).toHaveBeenCalled();
+    })
+
+    it('should call parseEvents', function() {
+      var f = function() {}
+      spyOn(couchdb, 'parseEvents');
+      spyOn(couchdb, 'request').andCallFake(function(data, callback) {
+        callback('data');
+      })
+
+      couchdb.getEventsByAggregate(1, f);
+
+      expect(couchdb.parseEvents).toHaveBeenCalledWith('data', f);
+    })
   })
 
   describe('getEventsByType', function() {
