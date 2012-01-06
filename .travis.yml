@@ -1,0 +1,3 @@
+script: "./jasmine-node spec/"
+node_js:
+   - 0.6
