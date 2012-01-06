@@ -19,6 +19,13 @@ describe('CommandBus', function() {
 
       expect(commandBus.handlers['event']).toEqual(f);
     })  
+
+    it('should accept only function as handler', function() {
+      expect(function() { 
+        commandBus.registerHandler('event', 'handler');
+      }).toThrow('Handler has to be function!');
+    })  
+
   })
 
   describe('.execute', function() {
