@@ -1,5 +1,5 @@
 var util = require('util'),
-    db = require('../lib/couchDb').getInstance(),
+    db = require('../lib/couchdb').getInstance(),
     Aggregate = require('../lib/aggregate');
 
 describe('Aggregate', function() {
