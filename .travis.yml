@@ -2,3 +2,4 @@ language: node_js
 script: "./jasmine-node spec/"
 node_js:
    - 0.6
+before_script: npm install
