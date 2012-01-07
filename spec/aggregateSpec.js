@@ -1,6 +1,6 @@
 var util = require('util'),
     couchdb = require('../lib/repository/couchdb').getInstance(),
-    db = require('../lib/repository').getInstance(),
+    repository = require('../lib/repository').getInstance(),
     Aggregate = require('../lib/aggregate');
 
 describe('Aggregate', function() {
@@ -8,7 +8,7 @@ describe('Aggregate', function() {
   var Foo, foo, dbGetEventsByAggregateSpy;
 
   beforeEach(function() {
-    db.strategy = couchdb;
+    repository.strategy = couchdb;
 
     Foo = function(id, callback) {
       Aggregate.call(this, id, callback);
@@ -16,7 +16,7 @@ describe('Aggregate', function() {
 
     util.inherits(Foo, Aggregate);
 
-    dbGetEventsByAggregateSpy = spyOn(db, 'getEventsByAggregate').andCallFake(function(id, callback) {
+    dbGetEventsByAggregateSpy = spyOn(repository, 'getEventsByAggregate').andCallFake(function(id, callback) {
       callback([]);
     });      
 
@@ -28,7 +28,7 @@ describe('Aggregate', function() {
     it( 'should load data from event bus', function() {
       foo = new Foo(1);
 
-      expect(db.getEventsByAggregate).toHaveBeenCalledWith( 1, jasmine.any(Function) );
+      expect(repository.getEventsByAggregate).toHaveBeenCalledWith( 1, jasmine.any(Function) );
     })
 
     it( 'should call apply, for all events', function() {
@@ -86,11 +86,11 @@ describe('Aggregate', function() {
   describe('.emit', function() {
     
     it( 'should store event', function() {
-      spyOn( db, 'storeEvent' );
+      spyOn( repository, 'storeEvent' );
       
       foo.emit( 'foo', {foo: 'bar'} );
 
-      expect( db.storeEvent ).toHaveBeenCalledWith( 1, 'foo', {foo: 'bar'} );
+      expect( repository.storeEvent ).toHaveBeenCalledWith( 1, 'foo', {foo: 'bar'} );
     })
   })
 })
