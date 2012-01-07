@@ -5,7 +5,8 @@ describe('Repository', function() {
 
   beforeEach(function() {
     strategy = {
-      storeEvent: function() {}
+      storeEvent: function() {},
+      getEventsByAggregate: function() {}
     }
 
     repository = new Repository(strategy);
@@ -30,5 +31,13 @@ describe('Repository', function() {
     repository.storeEvent();
 
     expect(repository.strategy.storeEvent).toHaveBeenCalled();
+  })
+
+  it('should delegate getEventsByAggregate method to strategy', function() {
+    spyOn(repository.strategy, 'getEventsByAggregate');
+
+    repository.getEventsByAggregate();
+
+    expect(repository.strategy.getEventsByAggregate).toHaveBeenCalled();
   })
 })
