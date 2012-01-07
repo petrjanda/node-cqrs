@@ -1,5 +1,6 @@
 var util = require('util'),
-    db = require('../lib/repository/couchdb').getInstance(),
+    couchdb = require('../lib/repository/couchdb').getInstance(),
+    db = require('../lib/repository').getInstance(),
     Aggregate = require('../lib/aggregate');
 
 describe('Aggregate', function() {
@@ -7,6 +8,8 @@ describe('Aggregate', function() {
   var Foo, foo, dbGetEventsByAggregateSpy;
 
   beforeEach(function() {
+    db.strategy = couchdb;
+
     Foo = function(id, callback) {
       Aggregate.call(this, id, callback);
     }
