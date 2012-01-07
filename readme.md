@@ -1,0 +1,1 @@
+[![Build Status](https://secure.travis-ci.org/petrjanda/node-cqrs.png?branch=master)
