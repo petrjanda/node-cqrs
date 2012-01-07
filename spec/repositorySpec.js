@@ -15,4 +15,8 @@ describe('Repository', function() {
   it('should store the strategy object', function() {
     expect(repository.strategy).toEqual('foo');
   })
+
+  it('should be singleton', function() {
+    expect(typeof Repository.getInstance).toBe('function');
+  })
 })
