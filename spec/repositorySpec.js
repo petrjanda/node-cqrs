@@ -1,10 +1,14 @@
 var Repository = require('../lib/repository');
 
 describe('Repository', function() {
-  var repository;
+  var strategy, repository;
 
   beforeEach(function() {
-    repository = new Repository('foo');
+    strategy = {
+      storeEvent: function() {}
+    }
+
+    repository = new Repository(strategy);
   })
 
   it('should exists', function() {
@@ -13,10 +17,18 @@ describe('Repository', function() {
   })
 
   it('should store the strategy object', function() {
-    expect(repository.strategy).toEqual('foo');
+    expect(repository.strategy).toEqual(strategy);
   })
 
   it('should be singleton', function() {
     expect(typeof Repository.getInstance).toBe('function');
+  })
+
+  it('should delegate storeEvent method to strategy', function() {
+    spyOn(repository.strategy, 'storeEvent');
+
+    repository.storeEvent();
+
+    expect(repository.strategy.storeEvent).toHaveBeenCalled();
   })
 })
