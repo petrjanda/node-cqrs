@@ -16,6 +16,7 @@ Node-CQRS is available as npm package.
 In order to initialize your application. First you need to configure your repository.
 At the moment only CouchDB implementation is available and can be initialized with:
 
+    ```javascript
     var repo = require('cqrs').Repository.getInstance(),
         couchdb = require('cqrs').CouchDb.getInstance();
 
@@ -26,6 +27,7 @@ At the moment only CouchDB implementation is available and can be initialized wi
     };
 
     repo.strategy = couchdb;
+    ```
 
 The code above first setup couch db information and then inject it as the permanency
 strategy into the repository object. In require statements you can see, that both
