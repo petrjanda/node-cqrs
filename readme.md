@@ -85,12 +85,16 @@ BankAccount.prototype.onMoneyWithdrawn = function(event) {
 
 The aggregate based and event driven architecture in your domain allows you to
 build your domain objects with one huge benefit - Your behavior and state 
-mutations are separated. Your commands are together public API of your object.
-Command takes a necessary arguments, check the current object state and throw
-error in case the command couldn't have been executed or emit event, if it was
-successful. Secondly, object implements event handlers, which are responsible
-to mutate objects state, based on the event data. Event handlers should not
-contain any conditional logic and should never been called directly.
+mutations are separated into commands and event handler. 
+
+Your commands are together public API of your object. Command takes a necessary
+arguments, check the current object state and throw error in case the command
+couldn't have been executed or emit event, if it was successful. 
+
+Event handlers are responsible to mutate objects state, based on the event data.
+Event handlers should not contain any conditional logic and should never been 
+called directly. Handler implementation takes event as argument and is called with
+'on' + event.name. Object has to implement one handler per each emited event.
 
 
 ## CI Status
