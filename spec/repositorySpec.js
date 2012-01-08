@@ -40,4 +40,47 @@ describe('Repository', function() {
 
     expect(repository.strategy.getEventsByAggregate).toHaveBeenCalled();
   })
+
+  describe('.handlers', function() {
+    it('should have empty handler on start', function() {
+      expect(repository.handlers).toEqual({});
+    })
+
+    it('should add event to handlers', function() {
+      var f = function() {};
+      
+      repository.on('foo', f);
+
+      expect(repository.handlers['foo']).toEqual([f]);
+    })
+
+    it('should allow add of multiple handlers for the same event', function() {
+      var f = function() {},
+          f2 = function() {};
+      
+      repository.on('foo', f);
+      repository.on('foo', f2);
+
+      expect(repository.handlers['foo']).toEqual([f, f2]);
+    })
+
+    it('should not allow to add same handler twice for same event', function() {
+      var f = function() {};
+      
+      repository.on('foo', f);
+      repository.on('foo', f);
+
+      expect(repository.handlers['foo']).toEqual([f]);
+    })
+
+    it('should not allow to add same handler for different events', function() {
+      var f = function() {};
+      
+      repository.on('foo', f);
+      repository.on('foobar', f);
+
+      expect(repository.handlers['foo']).toEqual([f]);
+      expect(repository.handlers['foobar']).toEqual([f]);
+    })    
+  })
 })
