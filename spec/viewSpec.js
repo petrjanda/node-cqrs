@@ -22,42 +22,32 @@ describe('View', function() {
     view = new MyView();
   })
 
-  describe('.constructor', function() {
+  describe('.load', function() {
 
     it( 'should load data from repository', function() {
-      view = new MyView();
+      view.load();
 
       expect(repository.getEventsByName).toHaveBeenCalledWith( 'foo', jasmine.any(Function) );
     })
 
     it( 'should call apply, for all events', function() {
-      var event;
+      var event = {foo: 'bar'};
 
-      runs(function() {
-        event = {name: 'foo'};
+      spyOn(view, 'apply');
+      repository.getEventsByName.andCallFake(function(names, callback) {
+        callback([event]);
+      }); 
 
-        repository.getEventsByName.andCallFake(function(id, callback) {
-          setTimeout(function() {
-            callback([event]);
-          }, 10);
-        });      
+      view.load();
 
-        view = new MyView();
-        spyOn(view, 'apply');
-      })
-
-      waits(15)
-
-      runs(function() {
-        expect( view.apply ).toHaveBeenCalledWith( event );    
-      })
+      expect( view.apply ).toHaveBeenCalledWith( event );    
     })
 
     it( 'should call callback if specified', function() {
       this.handler = function() {}
-
       spyOn( this, 'handler')
-      view = new MyView(this.handler);
+
+      view.load(this.handler);
 
       expect( this.handler ).toHaveBeenCalled();  
     })
