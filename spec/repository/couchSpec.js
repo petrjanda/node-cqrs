@@ -1,9 +1,9 @@
 var http = require('http'),
     jasmine = require('jasmine-node'),
-    CouchDb = require('../../lib/repository/couchdb'),
+    CouchDb = require('../../lib/repository/couch'),
     EventEmitter = require('events').EventEmitter;
 
-describe('couchdb', function() {
+describe('CouchRepository', function() {
   var couchdb;
 
   beforeEach(function() {
