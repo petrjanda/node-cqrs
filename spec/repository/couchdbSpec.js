@@ -84,9 +84,13 @@ describe('couchdb', function() {
   })
 
   describe('getEventsByType', function() {
-    it('should call request', function() {
-      spyOn(couchdb, 'request');
+    beforeEach(function() {
+      spyOn(couchdb, 'request').andCallFake(function(data, callback) {
+        callback('{"rows": [{"_id":1, "_ref":1, "value": {"foo": "bar"}}]}');
+      })
+    })
 
+    it('should call request', function() {
       couchdb.getEventsByName('foo', function() {});
 
       expect(couchdb.request).toHaveBeenCalledWith({
@@ -95,16 +99,40 @@ describe('couchdb', function() {
       }, jasmine.any(Function));
     })
 
+    describe('with event list', function() {
+      it('should call request for each event', function() {
+        couchdb.getEventsByName(['foo', 'bar'], function() {});
+
+        expect(couchdb.request).toHaveBeenCalledWith({
+          method: 'GET', 
+          path: '/cqrs/_design/cqrs/_view/name?startkey=["foo",0]&endkey=["foo",9999999999999]'
+        }, jasmine.any(Function));
+
+        expect(couchdb.request).toHaveBeenCalledWith({
+          method: 'GET', 
+          path: '/cqrs/_design/cqrs/_view/name?startkey=["bar",0]&endkey=["bar",9999999999999]'
+        }, jasmine.any(Function));
+      })
+
+      it('should call callback just once', function() {
+        var foo = {f: function() {}}
+        spyOn(foo, 'f');
+
+        couchdb.getEventsByName(['foo', 'bar'], foo.f);
+
+        expect(foo.f).toHaveBeenCalled();
+        expect(foo.f.callCount).toEqual(1);
+      })
+    })
+
+
     it('should call parseEvents', function() {
       var f = function() {}
       spyOn(couchdb, 'parseEvents');
-      spyOn(couchdb, 'request').andCallFake(function(data, callback) {
-        callback('data');
-      })
 
       couchdb.getEventsByName('foo', f);
 
-      expect(couchdb.parseEvents).toHaveBeenCalledWith('data', f);
+      expect(couchdb.parseEvents).toHaveBeenCalledWith('{"rows": [{"_id":1, "_ref":1, "value": {"foo": "bar"}}]}', f);
     })
   })
 

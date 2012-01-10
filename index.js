@@ -1,7 +1,7 @@
 var Aggregate = require('./lib/aggregate'),
     CommandBus = require('./lib/commandBus'),
     View = require('./lib/view'),
-    Repository = requre('./lib/couchdb');
+    Repository = require('./lib/repository');
 
 module.exports.Aggregate = Aggregate;
 module.exports.CommandBus = CommandBus;
