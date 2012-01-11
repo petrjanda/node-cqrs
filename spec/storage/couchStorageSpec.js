@@ -38,5 +38,23 @@ describe('CouchStorage', function() {
 
       expect(couchStorage.request).toHaveBeenCalledWith({ method : 'GET', path : '/cqrs/f4f5g8e76tko' }, jasmine.any(Function));
     })
+
+    it('should parse the returned data', function() {
+      var data = '{"_id":"e0eab491a60bd3d4183751ae407915b3","_rev":"1-97e88760a5636ac689a479b074661209","uid":"f8s7h5dggs","type":"view","lastEvent":1325721336913,"data":{"foo":"bar"}}',
+          foo = {f: function() {}};
+
+      spyOn(foo, 'f');
+      spyOn(couchStorage, 'request').andCallFake(function(id, callback) {
+        callback(data);
+      })
+
+      couchStorage.loadView('f8s7h5dggs', foo.f);      
+      
+      expect(foo.f).toHaveBeenCalledWith({
+        uid : 'f8s7h5dggs', 
+        lastEvent : 1325721336913, 
+        data : { foo : 'bar' }
+      });
+    })
   })
 })
