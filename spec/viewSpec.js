@@ -1,5 +1,5 @@
 var util = require('util'),
-    couchdb = require('../lib/repository/couch').getInstance(),
+    couchdb = require('../lib/repository/couchRepository').getInstance(),
     repository = require('../lib/repository').getInstance(),
     storage = require('../lib/storage/couch').getInstance(),
     View = require('../lib/view');
@@ -28,7 +28,7 @@ describe('View', function() {
     it('should load data from storage', function() {
       spyOn(storage, 'loadView');
       view.uid = '45fsgs45gh';
-      
+
       view.load();
 
       expect(storage.loadView).toHaveBeenCalledWith('45fsgs45gh', jasmine.any(Function));
