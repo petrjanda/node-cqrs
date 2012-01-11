@@ -1,6 +1,7 @@
 var util = require('util'),
     couchdb = require('../lib/repository/couch').getInstance(),
     repository = require('../lib/repository').getInstance(),
+    storage = require('../lib/storage/couch').getInstance(),
     View = require('../lib/view');
 
 describe('View', function() {
@@ -24,33 +25,42 @@ describe('View', function() {
 
   describe('.load', function() {
 
-    it( 'should load data from repository', function() {
+    it('should load data from storage', function() {
+      spyOn(storage, 'loadView');
+      view.uid = '45fsgs45gh';
+      
       view.load();
 
-      expect(repository.getEventsByName).toHaveBeenCalledWith( 'foo', jasmine.any(Function) );
+      expect(storage.loadView).toHaveBeenCalledWith('45fsgs45gh', jasmine.any(Function));
     })
 
-    it( 'should call apply, for all events', function() {
-      var event = {foo: 'bar'};
+    // it( 'should load data from repository', function() {
+    //   view.load();
 
-      spyOn(view, 'apply');
-      repository.getEventsByName.andCallFake(function(names, callback) {
-        callback([event]);
-      }); 
+    //   expect(repository.getEventsByName).toHaveBeenCalledWith( 'foo', jasmine.any(Function) );
+    // })
 
-      view.load();
+    // it( 'should call apply, for all events', function() {
+    //   var event = {foo: 'bar'};
 
-      expect( view.apply ).toHaveBeenCalledWith( event );    
-    })
+    //   spyOn(view, 'apply');
+    //   repository.getEventsByName.andCallFake(function(names, callback) {
+    //     callback([event]);
+    //   }); 
 
-    it( 'should call callback if specified', function() {
-      this.handler = function() {}
-      spyOn( this, 'handler')
+    //   view.load();
 
-      view.load(this.handler);
+    //   expect( view.apply ).toHaveBeenCalledWith( event );    
+    // })
 
-      expect( this.handler ).toHaveBeenCalled();  
-    })
+    // it( 'should call callback if specified', function() {
+    //   this.handler = function() {}
+    //   spyOn( this, 'handler')
+
+    //   view.load(this.handler);
+
+    //   expect( this.handler ).toHaveBeenCalled();  
+    // })
   })
   
   describe('.apply', function() {
