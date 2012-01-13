@@ -34,6 +34,13 @@ describe('View', function() {
       expect(storage.loadView).toHaveBeenCalledWith('45fsgs45gh', jasmine.any(Function));
     })
 
+    // it('should load events increment data from repository', function() {
+
+    //   expect(repository.getEventsByName).toHaveBeenCalledWith( 'foo', jasmine.any(Function) );
+
+    //   view.load();
+    // })
+
     // it( 'should load data from repository', function() {
     //   view.load();
 
