@@ -91,17 +91,17 @@ describe('CouchRepository', function() {
     })
 
     it('should call request', function() {
-      couchdb.getEventsByName('foo', function() {});
+      couchdb.getEventsByName('foo', 1000, function() {});
 
       expect(couchdb.request).toHaveBeenCalledWith({
         method: 'GET', 
-        path: '/cqrs/_design/cqrs/_view/name?startkey=["foo",0]&endkey=["foo",9999999999999]'
+        path: '/cqrs/_design/cqrs/_view/name?startkey=["foo",1000]&endkey=["foo",9999999999999]'
       }, jasmine.any(Function));
     })
 
     describe('with event list', function() {
       it('should call request for each event', function() {
-        couchdb.getEventsByName(['foo', 'bar'], function() {});
+        couchdb.getEventsByName(['foo', 'bar'], 0, function() {});
 
         expect(couchdb.request).toHaveBeenCalledWith({
           method: 'GET', 
@@ -118,7 +118,7 @@ describe('CouchRepository', function() {
         var foo = {f: function() {}}
         spyOn(foo, 'f');
 
-        couchdb.getEventsByName(['foo', 'bar'], foo.f);
+        couchdb.getEventsByName(['foo', 'bar'], 0, foo.f);
 
         expect(foo.f).toHaveBeenCalled();
         expect(foo.f.callCount).toEqual(1);
@@ -130,7 +130,7 @@ describe('CouchRepository', function() {
       var f = function() {}
       spyOn(couchdb, 'parseEvents');
 
-      couchdb.getEventsByName('foo', f);
+      couchdb.getEventsByName('foo', 0, f);
 
       expect(couchdb.parseEvents).toHaveBeenCalledWith('{"rows": [{"_id":1, "_ref":1, "value": {"foo": "bar"}}]}', f);
     })
