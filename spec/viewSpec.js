@@ -16,7 +16,7 @@ describe('View', function() {
 
     util.inherits(MyView, View);
 
-    spyOn(repository, 'getEventsByName').andCallFake(function(names, callback) {
+    spyOn(repository, 'getEventsByName').andCallFake(function(names, from, callback) {
       callback([]);
     });      
 
@@ -34,40 +34,48 @@ describe('View', function() {
       expect(storage.loadView).toHaveBeenCalledWith('45fsgs45gh', jasmine.any(Function));
     })
 
-    // it('should load events increment data from repository', function() {
 
-    //   expect(repository.getEventsByName).toHaveBeenCalledWith( 'foo', jasmine.any(Function) );
+    describe('callback', function() {
+      
+      beforeEach(function() {
+        spyOn(storage, 'loadView').andCallFake(function(uid, callback) {
+          callback({
+            uid : 'f8s7h5dggs', 
+            lastEvent : 1325721336913, 
+            data : { foo : 'bar' }
+          })
+        })
+      })
 
-    //   view.load();
-    // })
+      it('should load events increment data from repository', function() {
+        view.load();
 
-    // it( 'should load data from repository', function() {
-    //   view.load();
+        expect(repository.getEventsByName).toHaveBeenCalledWith( 'foo', 1325721336913, jasmine.any(Function) );
+      })
 
-    //   expect(repository.getEventsByName).toHaveBeenCalledWith( 'foo', jasmine.any(Function) );
-    // })
 
-    // it( 'should call apply, for all events', function() {
-    //   var event = {foo: 'bar'};
+      it( 'should call apply, for all events', function() {
+        var event = {foo: 'bar'};
 
-    //   spyOn(view, 'apply');
-    //   repository.getEventsByName.andCallFake(function(names, callback) {
-    //     callback([event]);
-    //   }); 
+        spyOn(view, 'apply');
+        repository.getEventsByName.andCallFake(function(names, from, callback) {
+          callback([event]);
+        }); 
 
-    //   view.load();
+        view.load();
 
-    //   expect( view.apply ).toHaveBeenCalledWith( event );    
-    // })
+        expect( view.apply ).toHaveBeenCalledWith( event );    
+      })
 
-    // it( 'should call callback if specified', function() {
-    //   this.handler = function() {}
-    //   spyOn( this, 'handler')
+      it( 'should call callback if specified', function() {
+        this.handler = function() {}
+        spyOn( this, 'handler')
 
-    //   view.load(this.handler);
+        view.load(this.handler);
 
-    //   expect( this.handler ).toHaveBeenCalled();  
-    // })
+        expect( this.handler ).toHaveBeenCalled();  
+      })
+    })
   })
   
   describe('.apply', function() {
