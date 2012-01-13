@@ -47,6 +47,12 @@ describe('View', function() {
         })
       })
 
+      it('should store data to the view', function() {
+        view.load();
+
+        expect(view.data).toEqual({ foo : 'bar' })
+      })
+
       it('should load events increment data from repository', function() {
         view.load();
 
