@@ -1,5 +1,6 @@
 var couchRepository = require('../../lib/repository/couchRepository').getInstance(),
     repository = require('../../lib/repository').getInstance(),
+    couchStorage = require('../../lib/storage/couchStorage').getInstance(),
     util = require('util'),
     Aggregate = require('../../lib/aggregate'),
     View = require('../../lib/view')
@@ -8,7 +9,7 @@ var App = function() {}
 
 App.prototype.init = function() {
   repository.strategy = couchRepository;	
-  couchRepository.database = 'bank';
+  couchRepository.database = couchStorage.database = 'bank';
 }
 
 var Account = function(id, callback) {
