@@ -1,7 +1,7 @@
 var util = require('util'),
     couchdb = require('../lib/repository/couchRepository').getInstance(),
     repository = require('../lib/repository').getInstance(),
-    storage = require('../lib/storage/couch').getInstance(),
+    storage = require('../lib/storage/couchStorage').getInstance(),
     View = require('../lib/view');
 
 describe('View', function() {

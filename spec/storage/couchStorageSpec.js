@@ -1,4 +1,4 @@
-var CouchStorage = require('../../lib/storage/couch'),
+var CouchStorage = require('../../lib/storage/couchStorage'),
     jasmine = require('jasmine-node');
 
 describe('CouchStorage', function() {
