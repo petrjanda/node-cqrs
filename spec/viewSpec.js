@@ -53,6 +53,13 @@ describe('View', function() {
         expect(view.data).toEqual({ foo : 'bar' })
       })
 
+      it('should store data to the view', function() {
+        view.load();
+
+        expect(view.lastEvent).toEqual(1325721336913);
+      })
+
+
       it('should load events increment data from repository', function() {
         view.load();
 
