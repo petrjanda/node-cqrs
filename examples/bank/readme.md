@@ -16,7 +16,7 @@ and is focused to model the behavior described in the list above.
 ## Implementation
 
 Implementation is built on top of cqrs npm package and use CouchDB for both events
-storage and view cache as well.
+storage and view cache.
 
 ### Aggregate
 
