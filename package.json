@@ -15,6 +15,7 @@
   },
   "dependencies": {},
   "devDependencies": {
-    "jasmine-node": "*"
+    "jasmine-node": "*",
+    "express": ">= 2.5.6"
   }
 }
