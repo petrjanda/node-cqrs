@@ -31,8 +31,8 @@ lets take a look at commands.
 
 _Commands_ are supposed to do some action on your aggregate. They should always be 
 modeling the real world behavior. There is no CRUD! Who has ever seen delete 
-action on the account? What is that supposed to do? Instead bank object would 
-have .deposit(), .withdraw(), .transfer() are valid account operations.
+action on the account? What is that supposed to do? Instead .deposit(), .withdraw(), 
+.transfer() are valid account operations.
 
 ```javascript
 Account.prototype.deposit = function(amount) {
