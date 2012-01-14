@@ -16,16 +16,45 @@ App.prototype.init = function() {
 var app = new App();
 app.init();
 
-//var account = Account.create('865389270297', 'Petr Janda');
+var args = process.argv.slice(2).reverse();
 
-var account = new Account('865389270297', function() {
-  //account.deposit(Math.floor(Math.random() * 1000));
-});
+switch(arg = args.pop()) {
+  case '--open':
+    var number = args.pop();
+    var owner = args.pop();
 
-//for(var i = 0; i < 1000; i++)
-//account.deposit(Math.floor(Math.random() * 1000));
+    Account.create(number, owner);
+    break;
 
-var accountBalancesView = new AccountBalancesView();
-accountBalancesView.load(function() {
-  console.log(this.data);
-});
+  case '--deposit':
+    var number = args.pop();
+    var amount = parseFloat(args.pop());
+
+    new Account(number, function() {
+      this.deposit(amount); 
+    });
+    break;
+
+  case '--list':
+    var accountBalancesView = new AccountBalancesView();
+    
+    accountBalancesView.load(function() {
+      console.log(this.data);
+    });
+    break;
+
+  default:
+    console.log(arg);
+    console.log([
+      'Bank v1.0 (petrjanda@me.com)',
+      '',
+      'Usage:',
+      'node examples/bank/app.js',
+      '',
+      '  --open accountNumber ownerName - Open new account',
+      '  --deposit accountNumber amount - Deposit money to account',
+      '  --list - List account balances',
+      ''
+    ].join('\n'));
+}
+

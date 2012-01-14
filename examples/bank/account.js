@@ -21,7 +21,6 @@ Account.create = function(number, owner) {
 }
 
 Account.prototype.deposit = function(amount) {
-  console.log(this)
   this.emit('moneyDeposited', {number: this.number, amount: amount});
 }
 
