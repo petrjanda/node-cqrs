@@ -15,5 +15,5 @@ Node-CQRS is available as npm package.
 
 The example of complete application is available in examples/bank folder.
 
-*With current implementation, only CouchDB is supported for both event streaming storage and
+*With current implementation, only CouchDB is supported for both event sourcing storage and
 views cache storage.*
