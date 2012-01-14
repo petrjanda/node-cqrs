@@ -44,7 +44,6 @@ switch(arg = args.pop()) {
     break;
 
   default:
-    console.log(arg);
     console.log([
       'Bank v1.0 (petrjanda@me.com)',
       '',
