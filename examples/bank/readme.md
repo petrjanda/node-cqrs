@@ -21,17 +21,13 @@ know, how much money there is on the account, the balance information is also
 part of the account state.
 
 The whole class implementation has 3 major parts: constructor, business commands 
-and event handlers. Lets take a look at each part.
+and event handlers. Constructor just implement inharitance from aggregate so
+lets take a look at commands.
 
-Constructor is relatively simple, only think, which is done here, is the
-inharitance from Aggregate class, so Account get all the Aggregate specific
-behavior.
-
-The business commands are much more interesting. Each command is supposed to do
-some action on your aggregate. It should always be modeling the real world behavior.
-There is no CRUD! Who has ever seen delete action on the account? What is that 
-supposed to do? Instead bank object would have .deposit(), .withdraw(), 
-.transfer() are valid account operations.
+Commands are supposed to do some action on your aggregate. They should always be 
+modeling the real world behavior. There is no CRUD! Who has ever seen delete 
+action on the account? What is that supposed to do? Instead bank object would 
+have .deposit(), .withdraw(), .transfer() are valid account operations.
 
 ```javascript
 Account.prototype.deposit = function(amount) {
