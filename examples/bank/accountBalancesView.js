@@ -11,11 +11,9 @@ module.exports = AccountBalancesView = function() {
 util.inherits(AccountBalancesView, View);
 
 AccountBalancesView.prototype.onMoneyDeposited = function(event) {
-  console.log(event)
   this.data[event.attrs.number].balance += event.attrs.amount;
 }
 
 AccountBalancesView.prototype.onAccountCreated = function(event) {
-  console.log(event)
   this.data[event.attrs.number] = {owner: event.attrs.owner, balance: 0};
 }
