@@ -100,5 +100,5 @@ The output of this view looks like this:
 }
 ```
 
-Accounts are grouped as into object, to allow simple lookup by number. Any different
+Accounts are grouped into object, to allow simple lookup by number. Any different
 data structure can be used.

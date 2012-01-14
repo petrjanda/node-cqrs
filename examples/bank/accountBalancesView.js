@@ -10,6 +10,10 @@ module.exports = AccountBalancesView = function() {
 
 util.inherits(AccountBalancesView, View);
 
+
+
+// EVENT HANDLERS
+
 AccountBalancesView.prototype.onMoneyDeposited = function(event) {
   this.data[event.attrs.number].balance += event.attrs.amount;
 }
