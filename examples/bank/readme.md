@@ -24,7 +24,7 @@ The whole class implementation has 3 major parts: constructor, business commands
 and event handlers. Constructor just implement inharitance from aggregate so
 lets take a look at commands.
 
-Commands are supposed to do some action on your aggregate. They should always be 
+_Commands_ are supposed to do some action on your aggregate. They should always be 
 modeling the real world behavior. There is no CRUD! Who has ever seen delete 
 action on the account? What is that supposed to do? Instead bank object would 
 have .deposit(), .withdraw(), .transfer() are valid account operations.
@@ -45,7 +45,7 @@ the necessary details.
 The command should never have the return value and even more important should
 never mutate state. Do the check, throw en error or emit an event. Thats command.
 
-Event handlers on the other hand are the place when aggregate state is updated.
+_Event handlers_ on the other hand are the place when aggregate state is updated.
 They should apply event data back to the aggregate. Because they reflect the 
 events which already happened, there should be no conditional logic. The implementation
 in Account looks like:
