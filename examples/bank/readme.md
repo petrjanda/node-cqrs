@@ -13,7 +13,38 @@ The system is based on CQRS library, therefore separates the writes (commands)
 and reads (queries). The business domain for a given application is very simple
 and is focused to model the behavior described in the list above. 
 
+### Aggregate implementation
+
 The only system aggregate is Account. Its designed as object, which represent
 real bank account and is identified by its number and owner id. In order to
 know, how much money there is on the account, the balance information is also
 part of the account state.
+
+The whole class implementation has 3 major parts: constructor, business commands 
+and event handlers. Lets take a look at each part.
+
+Constructor is relatively simple, only think, which is done here, is the
+inharitance from Aggregate class, so Account get all the Aggregate specific
+behavior.
+
+The business commands are much more interesting. Each command is supposed to do
+some action on your aggregate. It should always be modeling the real world behavior.
+There is no CRUD! Who has ever seen delete action on the account? What is that 
+supposed to do? Instead bank object would have .deposit(), .withdraw(), 
+.transfer() are valid account operations.
+
+```javascript
+Account.prototype.deposit = function(amount) {
+  this.emit('moneyDeposited', {number: this.number, amount: amount});
+}
+```
+
+The implementation of command itself has these phases:
+
+* 1. Check the current aggregate state to see if the command can be finished
+* 2a. Throw an error if the command cant be executed.
+* 2b. Emit an event in case command was executed well. Event should contain all
+the necessary details.
+
+The command should never have the return value and even more important should
+never mutate state. Do the check, throw en error or emit an event. Thats command.
