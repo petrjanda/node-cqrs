@@ -69,19 +69,17 @@ Account.prototype.onMoneyDeposited = function(event) {
 ### Views
 
 The cqrs package does handle the core system architecture and Aggregate implements
-the business logic and behavior of your system entities. We can call that as command
-side. 
+the business logic and behavior of your system. Thats command side. 
 
-To satisfy your users, you will have to give them back reports. Thats the query
-side of the system, which consist of views. Each view consumes specific list of
-events from the event storage and use them to update itself. It basically builds
-up the output report for a user. 
+To satisfy your users, you will have to have reports. View report represents specific
+look into your data. Each view consumes specific list of events from the event 
+storage and use them to update itself. It incrementally apply the events in a given
+order (same way as aggregate does to mutate itself) to build up requested output.
+View is the place, where data from multiple aggregates are joined together.
 
 Lets take a look at our only one view: Account balances. Its target is to display
-list of account information with current balances. You can see the view is the
-place, where data from multiple aggregates are joined together.
-
-The core part of the view implementation are event handlers:
+list of account information with current balances. The core part of the view 
+implementation are event handlers, which look like this:
 
 ```javascript
 AccountBalancesView.prototype.onMoneyDeposited = function(event) {
@@ -93,9 +91,7 @@ AccountBalancesView.prototype.onAccountCreated = function(event) {
 }
 ```
 
-Each event handler does some specific update of the view data. When all requested
-events from event storage are applied, the result report is built. The output of this
-view looks like this:
+The output of this view looks like this:
 
 ```json
 { 
