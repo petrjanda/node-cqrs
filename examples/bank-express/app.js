@@ -2,58 +2,45 @@ var couchRepository = require('../../lib/repository/couchRepository').getInstanc
     repository = require('../../lib/repository').getInstance(),
     couchStorage = require('../../lib/storage/couchStorage').getInstance(),
     Account = require('./account'),
-    AccountBalancesView = require('./accountBalancesView');
-
-var App = function() {}
-
-App.prototype.init = function() {
-  repository.strategy = couchRepository;	
-  couchRepository.database = couchStorage.database = 'bank';
-}
+    AccountBalancesView = require('./accountBalancesView'),
+    express = require ('express');
 
 
+var app = express.createServer();
 
-var app = new App();
+
+repository.strategy = couchRepository;
+couchRepository.database = couchStorage.database = 'bank';
+
 app.init();
 
-var args = process.argv.slice(2).reverse();
 
-switch(arg = args.pop()) {
-  case '--open':
-    var number = args.pop();
-    var owner = args.pop();
+app.get('/', function(req, res){
+  res.send('Hello, I am CQRS Bank system example \n');
+});
 
-    Account.create(number, owner);
-    break;
+app.post('/open/:number/:name', function(req, res) {
+  var number = req.params.number;
+  var owner  = req.params.name;
+  Account.create(number, owner);
+  res.send('Done');
+});
 
-  case '--deposit':
-    var number = args.pop();
-    var amount = parseFloat(args.pop());
+app.post('/deposit/:number/:amount', function(req, res) {
+  var number = req.params.number;
+  var amount = req.params.amount;
+  new Account(number, function() {
+    this.deposit(amount); 
+  });
+  res.send('Done');
+});
 
-    new Account(number, function() {
-      this.deposit(amount); 
-    });
-    break;
+app.get('/list', function(req, res) {
+  var accountBalancesView = new AccountBalancesView();
 
-  case '--list':
-    var accountBalancesView = new AccountBalancesView();
-    
-    accountBalancesView.load(function() {
-      console.log(this.data);
-    });
-    break;
+  accountBalancesView.load(function() {
+    res.send(this.data);
+  });
+})
 
-  default:
-    console.log([
-      'Bank v1.0 (petrjanda@me.com)',
-      '',
-      'Usage:',
-      'node examples/bank/app.js',
-      '',
-      '  --open accountNumber ownerName - Open new account',
-      '  --deposit accountNumber amount - Deposit money to account',
-      '  --list - List account balances',
-      ''
-    ].join('\n'));
-}
-
+app.listen(3000);
