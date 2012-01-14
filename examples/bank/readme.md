@@ -11,7 +11,7 @@ and their balance. There is just a few operations, which are allowed by the syst
 
 The system is based on CQRS library, therefore separates the writes (commands)
 and reads (queries). The business domain for a given application is very simple
-and is focused to model the behavior described in the list above. 
+and is focused to model the behavior described in the list above.
 
 ### Aggregate implementation
 
@@ -44,3 +44,19 @@ the necessary details.
 
 The command should never have the return value and even more important should
 never mutate state. Do the check, throw en error or emit an event. Thats command.
+
+Event handlers on the other hand are the place when aggregate state is updated.
+They should apply event data back to the aggregate. Because they reflect the 
+events which already happened, there should be no conditional logic. The implementation
+in Account looks like:
+
+```javascript
+Account.prototype.onAccountCreated = function(event) {
+  this.owner = event.attrs.owner;
+  this.number = event.attrs.number;
+}
+
+Account.prototype.onMoneyDeposited = function(event) {
+  this.balance += event.attrs.amount;
+}
+```
