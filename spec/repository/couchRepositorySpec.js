@@ -66,7 +66,7 @@ describe('CouchRepository', function() {
 
       expect(couchdb.request).toHaveBeenCalledWith({
         method : 'GET',
-        path : '/cqrs/_design/cqrs/_view/aggregate?startkey=[1,0]&endkey=[1,9999999999999]'
+        path : '/cqrs/_design/cqrs/_view/aggregate?startkey=["1",0]&endkey=["1",9999999999999]'
       }, jasmine.any(Function));
     })
 

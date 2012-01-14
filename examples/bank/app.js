@@ -16,10 +16,14 @@ App.prototype.init = function() {
 var app = new App();
 app.init();
 
-var account = new Account(1);
+//var account = Account.create('865389270297', 'Petr Janda');
 
-// for(var i = 0; i < 1000; i++)
-//   account.deposit(Math.floor(Math.random() * 1000));
+var account = new Account('865389270297', function() {
+  //account.deposit(Math.floor(Math.random() * 1000));
+});
+
+//for(var i = 0; i < 1000; i++)
+//account.deposit(Math.floor(Math.random() * 1000));
 
 var accountBalancesView = new AccountBalancesView();
 accountBalancesView.load(function() {

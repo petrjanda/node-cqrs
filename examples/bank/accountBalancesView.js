@@ -1,15 +1,21 @@
 var util = require('util'),
-	View = require('../../lib/view');
+    View = require('../../lib/view');
 
 
 module.exports = AccountBalancesView = function() {
   View.call(this, ['accountCreated', 'moneyDeposited']);
   
-  this.data = {total: 0};
+  this.data = {};
 }
 
 util.inherits(AccountBalancesView, View);
 
 AccountBalancesView.prototype.onMoneyDeposited = function(event) {
-  this.data.total += event.attrs.amount;
+  console.log(event)
+  this.data[event.attrs.number].balance += event.attrs.amount;
+}
+
+AccountBalancesView.prototype.onAccountCreated = function(event) {
+  console.log(event)
+  this.data[event.attrs.number] = {owner: event.attrs.owner, balance: 0};
 }
