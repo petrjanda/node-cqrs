@@ -99,3 +99,6 @@ The output of this view looks like this:
   '354395980207': { owner: 'Petr', balance: 2200 } 
 }
 ```
+
+Accounts are grouped as into object, to allow simple lookup by number. Any different
+data structure can be used.
