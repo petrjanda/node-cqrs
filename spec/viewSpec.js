@@ -63,7 +63,7 @@ describe('View', function() {
       it('should load events increment data from repository', function() {
         view.load();
 
-        expect(repository.getEventsByName).toHaveBeenCalledWith( 'foo', 1325721336913, jasmine.any(Function) );
+        expect(repository.getEventsByName).toHaveBeenCalledWith( 'foo', 1325721336914, jasmine.any(Function) );
       })
 
 

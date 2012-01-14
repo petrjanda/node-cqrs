@@ -1,9 +1,8 @@
 var couchRepository = require('../../lib/repository/couchRepository').getInstance(),
     repository = require('../../lib/repository').getInstance(),
     couchStorage = require('../../lib/storage/couchStorage').getInstance(),
-    util = require('util'),
-    Aggregate = require('../../lib/aggregate'),
-    View = require('../../lib/view')
+    Account = require('./account'),
+    AccountBalancesView = require('./accountBalancesView');
 
 var App = function() {}
 
@@ -12,38 +11,17 @@ App.prototype.init = function() {
   couchRepository.database = couchStorage.database = 'bank';
 }
 
-var Account = function(id, callback) {
-  Aggregate.call(this, id, callback);
 
-  this.balance = 0;
-}
-
-util.inherits(Account, Aggregate);
-
-Account.create = function(number) {
-  var account = new Account(number);
-  account.emit('accountCreated', {number: number});
-}
-
-Account.prototype.deposit = function(amount) {
-  this.emit('moneyDeposited', {amount: amount});
-}
-
-Account.prototype.onMoneyDeposited = function(event) {
-  this.balance += event.attrs.amount;
-}
 
 var app = new App();
 app.init();
 
 var account = new Account(1);
-account.deposit(10);
 
-var AccountBalancesView = function() {
-  View.call(this, ['accountCreated', 'moneyDeposited']);
-}
-
-util.inherits(AccountBalancesView, View);
+// for(var i = 0; i < 1000; i++)
+//   account.deposit(Math.floor(Math.random() * 1000));
 
 var accountBalancesView = new AccountBalancesView();
-accountBalancesView.load();
+accountBalancesView.load(function() {
+  console.log(this.data);
+});

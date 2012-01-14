@@ -23,10 +23,11 @@ describe('CouchStorage', function() {
     it('should call createDocument', function() {
       var view = {uid: 1, lastEvent: 12, data: 'foo'};
       spyOn(couchStorage, 'createDocument');
+      spyOn(Date.prototype, 'getTime').andCallFake(function() { return 123456; })
 
       couchStorage.storeView(view);
 
-      expect(couchStorage.createDocument).toHaveBeenCalledWith('{"viewId":1,"type":"view","lastEvent":12,"data":"foo"}');
+      expect(couchStorage.createDocument).toHaveBeenCalledWith('{"viewId":1,"type":"view","lastEvent":12,"time":123456,"data":"foo"}');
     })
   })
 
@@ -36,11 +37,11 @@ describe('CouchStorage', function() {
 
       couchStorage.loadView('f4f5g8e76tko');
 
-      expect(couchStorage.request).toHaveBeenCalledWith({ method : 'GET', path : '/cqrs/f4f5g8e76tko' }, jasmine.any(Function));
+      expect(couchStorage.request).toHaveBeenCalledWith({ method : 'GET', path : '/cqrs/_design/cqrs/_view/viewSnapshot?startkey=["f4f5g8e76tko",999999999999999999]&endkey=["f4f5g8e76tko",0]&limit=1&descending=true' }, jasmine.any(Function));
     })
 
     it('should parse the returned data', function() {
-      var data = '{"_id":"e0eab491a60bd3d4183751ae407915b3","_rev":"1-97e88760a5636ac689a479b074661209","uid":"f8s7h5dggs","type":"view","lastEvent":1325721336913,"data":{"foo":"bar"}}',
+      var data = '{"total_rows":40,"offset":2,"rows":[{"id":"e9f59b5f8c965ebce700eeec1baf7a60","key":["1j0ddsesdfsfdo0m7",1326500825084],"value":{"_id":"e9f59b5f8c965ebce700eeec1baf7a60","_rev":"1-0145acc24d7c96db4d8ef260ad4afec4","viewId":"1j0ddsesdfsfdo0m7","type":"view","lastEvent":1326500821237,"time":1326500825084,"data":{"total":1054078}}}]}',
           foo = {f: function() {}};
 
       spyOn(foo, 'f');
@@ -51,9 +52,10 @@ describe('CouchStorage', function() {
       couchStorage.loadView('f8s7h5dggs', foo.f);      
       
       expect(foo.f).toHaveBeenCalledWith({
-        uid : 'f8s7h5dggs', 
-        lastEvent : 1325721336913, 
-        data : { foo : 'bar' }
+        viewId : '1j0ddsesdfsfdo0m7', 
+        lastEvent : 1326500821237, 
+        time: 1326500825084,
+        data : { total : 1054078 }
       });
     })
   })

@@ -1,0 +1,23 @@
+var util = require('util'),
+	Aggregate = require('../../lib/aggregate');
+
+module.exports = Account = function(id, callback) {
+  Aggregate.call(this, id, callback);
+
+  this.balance = 0;
+}
+
+util.inherits(Account, Aggregate);
+
+Account.create = function(number) {
+  var account = new Account(number);
+  account.emit('accountCreated', {number: number});
+}
+
+Account.prototype.deposit = function(amount) {
+  this.emit('moneyDeposited', {amount: amount});
+}
+
+Account.prototype.onMoneyDeposited = function(event) {
+  this.balance += event.attrs.amount;
+}
