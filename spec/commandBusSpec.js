@@ -7,6 +7,17 @@ describe('CommandBus', function() {
     commandBus = new CommandBus();
   })
 
+  describe('instance', function() {
+    it('should get instance of CouchStorage', function() {
+      var commandBus = CommandBus.getInstance()
+      expect(typeof commandBus.execute).toEqual('function');
+    })
+
+    it('should return just one instance', function() {
+      expect(CommandBus.getInstance()).toEqual(CommandBus.getInstance())
+    })
+  })
+
   it('should initialize empty handlers list', function() {
     expect(commandBus.handlers).toEqual({});
   })
