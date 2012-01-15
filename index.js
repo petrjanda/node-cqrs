@@ -3,7 +3,7 @@ var Aggregate = require('./lib/aggregate'),
     View = require('./lib/view'),
     Repository = require('./lib/repository'),
     CouchRepository = require('./lib/repository/couchRepository'),
-    CouchStorage = require('./lib/strage/couchStorage');
+    CouchStorage = require('./lib/storage/couchStorage');
 
 module.exports.Aggregate = Aggregate;
 module.exports.CommandBus = CommandBus;
