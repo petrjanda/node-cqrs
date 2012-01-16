@@ -54,6 +54,18 @@ describe('CommandBus', function() {
 
       expect(commandBus.handlers['foo']).toHaveBeenCalledWith({foo: 'bar'});
     })
+
+    it('should pass callback if supplied', function() {
+      var cb, f = function() {}
+
+      commandBus.handlers['foo'] = function(attrs, callback) {
+        cb = callback;
+      }
+
+      commandBus.execute('foo', {foo: 'bar'}, f);
+
+      expect(cb).toEqual(f);
+    })
   })
   
 })
