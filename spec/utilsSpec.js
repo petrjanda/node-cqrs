@@ -28,6 +28,53 @@ describe('Utils', function() {
     })    
   })
 
+  describe('.extendable', function() {
+    var Base;
+
+    beforeEach(function() {
+      Base = function() {}
+      Base.prototype.foo = function() {}
+    })
+
+    it('should define extend method', function() {
+      utils.extendable(Base);
+
+      expect(typeof Base.extend).toEqual('function');
+    })
+
+    it('.extend should accept prototype param', function() {
+      utils.extendable(Base);
+
+      var Foo = Base.extend(function(param) {
+        this.param = param;
+      });
+
+      var bar = new Foo('blah');
+
+      expect(bar.param).toEqual('blah');
+    })
+
+    it('.extend create constructor which call base constructor', function() {
+      Base = function() { this.baseVar = true };
+
+      utils.extendable(Base);
+
+      var Foo = Base.extend();
+
+      var bar = new Foo('blah');
+
+      expect(bar.baseVar).toEqual(true);
+    })
+
+    it('.extend should all properties from Base prototype', function() {
+      utils.extendable(Base);
+
+      var Foo = Base.extend();
+
+      expect(Foo.prototype.foo).toEqual(Base.prototype.foo);
+    })
+  })
+
   describe('.delegators', function() {
     var Base, base;
 
