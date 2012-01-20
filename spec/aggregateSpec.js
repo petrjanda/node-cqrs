@@ -23,6 +23,10 @@ describe('Aggregate', function() {
     foo = new Foo(1);
   })
 
+  it('should be extendable', function() {
+    expect(typeof Aggregate.extend).toEqual('function');
+  })
+
   describe('.constructor', function() {
 
     it( 'should load data from event bus', function() {
