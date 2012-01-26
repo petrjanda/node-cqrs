@@ -11,7 +11,7 @@ describe('View', function() {
     repository.strategy = couchdb;
 
     MyView = function(callback) {
-      View.call(this, 'foo', callback);
+      View.call(this, 'myview', 'foo', callback);
     }
 
     util.inherits(MyView, View);
@@ -21,6 +21,12 @@ describe('View', function() {
     });      
 
     view = new MyView();
+  })
+
+  describe('constructor', function() {
+    it('should initialize view id', function() {
+      expect(view.uid).toEqual('myview');
+    })
   })
 
   describe('.load', function() {
