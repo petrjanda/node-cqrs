@@ -13,7 +13,9 @@
   "scripts": {
     "test": "./jasmine-node spec/"
   },
-  "dependencies": {},
+  "dependencies": {
+    "microtime": "*"
+  },
   "devDependencies": {
     "jasmine-node": "*"
   }

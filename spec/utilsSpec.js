@@ -2,6 +2,12 @@ var utils = require('../lib/utils');
 
 describe('Utils', function() {
   
+  describe('.uuid', function() {
+    it('should return unique identifier', function() {
+      expect(utils.uuid()).not.toEqual(utils.uuid());
+    })
+  })
+
   describe('.singleton', function() {
     var Base, base;
 
