@@ -54,7 +54,17 @@ describe('CouchRepository', function() {
         type: 'event',
         time: 123456,
         attrs: {foo: 'bar'}
-      }));
+      }), undefined);
+    })
+
+    it('should trigger callback if specified', function() {
+      var foo = {f: function() {}}
+      spyOn(couchdb, 'createDocument').andCallFake(function(data, callback) { callback() })
+      spyOn(foo, 'f');
+
+      couchdb.storeEvent(1, 'user:created', {foo: 'bar'}, foo.f);
+
+      expect(foo.f).toHaveBeenCalled();
     })
   })
 
