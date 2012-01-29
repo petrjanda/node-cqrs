@@ -25,12 +25,44 @@ describe('Repository', function() {
     expect(typeof Repository.getInstance).toBe('function');
   })
 
-  it('should delegate storeEvent method to strategy', function() {
-    spyOn(repository.strategy, 'storeEvent');
 
-    repository.storeEvent();
+  describe('.storeEvent', function() {
+    it('should delegate storeEvent method to strategy', function() {
+      spyOn(repository.strategy, 'storeEvent');
 
-    expect(repository.strategy.storeEvent).toHaveBeenCalled();
+      repository.storeEvent();
+
+      expect(repository.strategy.storeEvent).toHaveBeenCalled();
+    })    
+
+    it('should trigger handlers', function() {
+      var foo = {f: function() {}},
+          event = {foo: 'bar'};
+
+      spyOn(foo, 'f');
+      spyOn(repository.strategy, 'storeEvent').andCallFake(function(aggregateId, name, attrs, callback) {
+        callback(event);
+      })
+
+      repository.on('foo', foo.f);
+      repository.storeEvent(1, 'foo');
+
+      expect(foo.f).toHaveBeenCalledWith(event);
+    })
+
+    it('should trigger callback', function() {
+      var foo = {f: function() {}},
+          event = {foo: 'bar'};
+
+      spyOn(foo, 'f');
+      spyOn(repository.strategy, 'storeEvent').andCallFake(function(aggregateId, name, attrs, callback) {
+        callback(event);
+      })
+
+      repository.storeEvent(1, 'foo', {}, foo.f);
+
+      expect(foo.f).toHaveBeenCalledWith(event);
+    })
   })
 
   it('should delegate getEventsByAggregate method to strategy', function() {
