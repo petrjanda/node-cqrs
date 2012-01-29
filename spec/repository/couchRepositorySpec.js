@@ -54,7 +54,7 @@ describe('CouchRepository', function() {
         type: 'event',
         time: 123456,
         attrs: {foo: 'bar'}
-      }), undefined);
+      }), jasmine.any(Function));
     })
 
     it('should trigger callback if specified', function() {

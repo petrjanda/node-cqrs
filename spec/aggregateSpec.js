@@ -94,7 +94,27 @@ describe('Aggregate', function() {
       
       foo.emit( 'foo', {foo: 'bar'} );
 
-      expect( repository.storeEvent ).toHaveBeenCalledWith( 1, 'foo', {foo: 'bar'} );
+      expect( repository.storeEvent ).toHaveBeenCalledWith( 1, 'foo', {foo: 'bar'}, jasmine.any(Function));
+    })
+
+    it('should imediatelly apply message on itself', function() {
+      var name = 'foo',
+          attrs = {foo: 'bar'},
+          event = {
+            id: 1,
+            name: name,
+            time: new Date().getTime(),
+            attrs: attrs
+          };
+
+      spyOn(foo, 'apply');
+      spyOn(repository, 'storeEvent').andCallFake(function(id, name, attributes, callback) {
+        callback(event)
+      })
+
+      foo.emit(name, attrs);
+
+      expect(foo.apply).toHaveBeenCalledWith(event)
     })
   })
 })
