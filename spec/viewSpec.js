@@ -106,13 +106,15 @@ describe('View', function() {
     })
 
     it('shoud call appropriate handler', function() {
-      var event = {name: 'myEvent'};
+      var event = {name: 'myEvent'},
+          f = function() {};
+
       MyView.prototype.onMyEvent = function() {}
       spyOn(view, 'onMyEvent');
 
-      view.apply(event);
+      view.apply(event, f);
 
-      expect(view.onMyEvent).toHaveBeenCalledWith(event);
+      expect(view.onMyEvent).toHaveBeenCalledWith(event, f);
     })
   })
 })
