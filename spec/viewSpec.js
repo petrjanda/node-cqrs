@@ -83,7 +83,7 @@ describe('View', function() {
 
         view.load();
 
-        expect( view.apply ).toHaveBeenCalledWith( event );    
+        expect( view.apply ).toHaveBeenCalledWith( event, jasmine.any(Function) );    
       })
 
       it( 'should call callback if specified', function() {
