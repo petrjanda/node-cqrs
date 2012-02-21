@@ -31,6 +31,16 @@ describe('View', function() {
 
   describe('.load', function() {
 
+    describe('with disabled storage', function() {
+      it('should directly call getEventsByName', function() {
+        view.snapshots = false;
+
+        view.load();
+
+        expect(repository.getEventsByName).toHaveBeenCalledWith( 'foo', 1, jasmine.any(Function) );;
+      })      
+    })
+
     it('should load data from storage', function() {
       spyOn(storage, 'loadView');
       view.uid = '45fsgs45gh';
