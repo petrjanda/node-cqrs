@@ -1,7 +1,7 @@
 {
   "author": "Petr Janda <petrjanda@me.com> (www.twitter.com/petrjanda)",
   "name": "cqrs",
-  "version": "0.3.14",
+  "version": "0.3.15",
   "repository": {
     "type": "git",
     "url": "git://github.com/petrjanda/node-cqrs.git"
