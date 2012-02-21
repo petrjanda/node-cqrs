@@ -12,6 +12,8 @@ describe('View', function() {
 
     MyView = function(callback) {
       View.call(this, 'myview', 'foo', callback);
+
+      this.snapshots = true;
     }
 
     util.inherits(MyView, View);
