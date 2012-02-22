@@ -88,6 +88,23 @@ describe('couchdb', function() {
       })
     })
 
+    it('should call http.request with auth header if auth params are given', function() {
+      var got;
+      couchdb.options.user = 'foo';
+      couchdb.options.password = 'bar';
+
+      http.request.andCallFake(function(options, callback) {
+        got = options.headers;
+
+        return req;
+      })
+
+      couchdb.request();
+
+      expect(http.request).toHaveBeenCalled();
+      expect(got['Authorization']).toEqual("Basic " + new Buffer('foo:bar').toString('base64'))
+    })
+
     it('should call http.request with valid params', function() {
       couchdb.request();
 
