@@ -1,3 +1,7 @@
+## v0.4.5
+* fix the view store trigger conditions, disable view store if snapshots = false properly
+* fix the error response while view was loaded from the storage
+
 ## v0.4.4
 * export denormalizer
 
