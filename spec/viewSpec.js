@@ -52,6 +52,16 @@ describe('View', function() {
       expect(storage.loadView).toHaveBeenCalledWith('45fsgs45gh', jasmine.any(Function));
     })
 
+    describe('with explicit storage ofload', function() {
+      it('should directly call getEventsByName', function() {
+        spyOn(storage, 'loadView');
+        view.uid = '45fsgs45gh';
+
+        view.load(true);
+
+        expect(storage.loadView).not.toHaveBeenCalled();
+      })
+    })
 
     describe('callback', function() {
       
