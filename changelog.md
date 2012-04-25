@@ -1,3 +1,10 @@
+## v0.4.2
+* view take snapshots by default
+
+## v0.4.1
+* added first draft of denormalizer component. Its responsibility would be to manage view updates, so its step to ofload view
+ building to separate concept from view read model
+
 ## v0.3.8
 
 * chouch repository trigger callback on storeEvent() call
