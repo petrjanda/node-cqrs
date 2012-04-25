@@ -108,6 +108,24 @@ describe('View', function() {
         expect( view.apply ).toHaveBeenCalledWith( event, jasmine.any(Function) );    
       })
 
+      it( 'should store view if events increment was loaded', function() {
+        var event = {foo: 'bar'};
+
+        spyOn(view, 'apply').andCallFake(function(event, callback) { 
+          callback() 
+        });
+        
+        repository.getEventsByName.andCallFake(function(names, from, callback) {
+          callback([event]);
+        }); 
+
+        spyOn(storage, 'storeView');
+
+        view.load();
+
+        expect( storage.storeView ).toHaveBeenCalled();//With(view);  
+      })
+
       it( 'should call callback if specified', function() {
         this.handler = function() {}
         spyOn( this, 'handler')
