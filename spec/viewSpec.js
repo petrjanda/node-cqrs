@@ -114,7 +114,7 @@ describe('View', function() {
         spyOn(view, 'apply').andCallFake(function(event, callback) { 
           callback() 
         });
-        
+
         repository.getEventsByName.andCallFake(function(names, from, callback) {
           callback([event]);
         }); 
@@ -123,7 +123,27 @@ describe('View', function() {
 
         view.load();
 
-        expect( storage.storeView ).toHaveBeenCalled();//With(view);  
+        expect( storage.storeView ).toHaveBeenCalledWith(view);  
+      })
+
+      it( 'should not store view if snapshooting is disabled', function() {
+        var event = {foo: 'bar'};
+
+        spyOn(view, 'apply').andCallFake(function(event, callback) { 
+          callback() 
+        });
+        
+        repository.getEventsByName.andCallFake(function(names, from, callback) {
+          callback([event]);
+        }); 
+
+        spyOn(storage, 'storeView');
+
+        view.snapshots = false;
+
+        view.load();
+
+        expect( storage.storeView ).not.toHaveBeenCalled();
       })
 
       it( 'should call callback if specified', function() {
