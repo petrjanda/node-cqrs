@@ -1,3 +1,7 @@
+## v0.4.3
+* view .load() function take reload parameter, allowing to choose if snapshots should be used or the view should
+ be fully reconstructed from event store
+
 ## v0.4.2
 * view take snapshots by default
 
