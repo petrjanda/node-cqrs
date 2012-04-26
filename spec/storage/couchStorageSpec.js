@@ -56,26 +56,25 @@ describe('CouchStorage', function() {
     })
   })
 
+  function fakeRequest(data) {
+    spyOn(couchStorage, 'request').andCallFake(function(id, callback) {
+      callback(data);
+    })  
+  }
+
   describe('.deleteView', function() {
     it('should call deleteDocument', function() {
-      spyOn(couchStorage, 'request').andCallFake(function(id, callback) {
-        callback(validData);
-      })
-
+      fakeRequest(validData);
       spyOn(couchStorage, 'deleteDocument');
 
       couchStorage.purgeView('1j0ddsesdfsfdo0m7');
-
 
       expect(couchStorage.request).toHaveBeenCalledWith({ method : 'GET', path : '/cqrs/_design/cqrs/_view/viewSnapshot?startkey=["1j0ddsesdfsfdo0m7",999999999999999999]&endkey=["1j0ddsesdfsfdo0m7",0]&limit=1&descending=true' }, jasmine.any(Function));
       expect(couchStorage.deleteDocument).toHaveBeenCalledWith('e9f59b5f8c965ebce700eeec1baf7a60');
     })
 
     it('should not call deleteDocument if no previous view exists', function() {
-      spyOn(couchStorage, 'request').andCallFake(function(id, callback) {
-        callback(errorData);
-      })
-
+      fakeRequest(errorData);
       spyOn(couchStorage, 'deleteDocument');
 
       couchStorage.purgeView('1j0ddsesdfsfdo0m7');
@@ -86,6 +85,7 @@ describe('CouchStorage', function() {
   })
 
   describe('.loadView', function() {
+
     it('should call request', function() {
       spyOn(couchStorage, 'request');
 
@@ -98,9 +98,7 @@ describe('CouchStorage', function() {
       var foo = {f: function() {}};
 
       spyOn(foo, 'f');
-      spyOn(couchStorage, 'request').andCallFake(function(id, callback) {
-        callback(errorData);
-      })
+      fakeRequest(errorData);
 
       couchStorage.loadView('f8s7h5dggs', foo.f);      
       
@@ -111,9 +109,7 @@ describe('CouchStorage', function() {
       var foo = {f: function() {}};
 
       spyOn(foo, 'f');
-      spyOn(couchStorage, 'request').andCallFake(function(id, callback) {
-        callback(validData);
-      })
+      fakeRequest(validData);
 
       couchStorage.loadView('f8s7h5dggs', foo.f);      
       
