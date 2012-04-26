@@ -13,7 +13,7 @@ describe('CouchRepository', function() {
   describe('instance', function() {
     it('should get instance of couchdb', function() {
       var couchdb = CouchDb.getInstance()
-      expect(typeof couchdb.request).toEqual('function');
+      expect(typeof couchdb._db).toEqual('object');
     })
 
     it('should return just one instance', function() {

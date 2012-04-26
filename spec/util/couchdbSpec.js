@@ -24,11 +24,8 @@ describe('couchdb', function() {
           data = JSON.stringify({ foo: 'bar' });
 
       spyOn(couchdb._db, 'insert');
-      spyOn(couchdb, 'getUuid').andCallFake(function(callback) {
-        callback('1234');
-      })
       
-      couchdb.createDocument(data, callback);
+      couchdb.createDocument('1234', data, callback);
 
       expect(couchdb._db.insert).toHaveBeenCalledWith(data, '1234', callback);
     })
@@ -36,42 +33,13 @@ describe('couchdb', function() {
 
   describe('deleteDocument', function() {
     it('should call proper request', function() {
-      var callback = function() {},
-          options = { path: '/cqrs/1234', method: 'DELETE'};
+      var callback = function() {};
 
-      spyOn(couchdb, 'request');
+      spyOn(couchdb._db, 'destroy');
       
-      couchdb.deleteDocument(1234, callback);
+      couchdb.deleteDocument(1234, 12345, callback);
 
-      expect(couchdb.request).toHaveBeenCalledWith(options, callback);
-    })
-  })
-
-  describe('getUuid', function() {
-    it('should call proper request', function() {
-      var options = {
-        path: '/_uuids', 
-        method: 'GET', 
-      };
-      spyOn(couchdb, 'request');
-
-      couchdb.getUuid(function() {});
-
-      expect(couchdb.request).toHaveBeenCalledWith(options, jasmine.any(Function));
-    })
-
-    it('it should parse value and call callback', function() {
-      var foo = { callback: function() {} },
-          couchdbRequest = couchdb.request;
-
-      couchdb.request = function(options, callback) {
-        callback('{"uuids":["a45287db79779654689b4df73a00087a"]}');
-      }
-      spyOn(foo, 'callback');
-
-      couchdb.getUuid(foo.callback);
-
-      expect(foo.callback).toHaveBeenCalledWith('a45287db79779654689b4df73a00087a');
+      expect(couchdb._db.destroy).toHaveBeenCalledWith(1234, 12345, callback);
     })
   })
 
