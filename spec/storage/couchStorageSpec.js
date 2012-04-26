@@ -2,7 +2,32 @@ var CouchStorage = require('../../lib/storage/couchStorage'),
     jasmine = require('jasmine-node');
 
 describe('CouchStorage', function() {
-  var couchStorage;
+  var couchStorage,
+
+  validData = JSON.stringify({
+    "total_rows":40,
+    "offset":2,
+    "rows": [
+      {
+        "id":"e9f59b5f8c965ebce700eeec1baf7a60",
+        "key": ["1j0ddsesdfsfdo0m7",1326500825084],
+        "value":{
+          "_id":"e9f59b5f8c965ebce700eeec1baf7a60",
+          "_rev":"1-0145acc24d7c96db4d8ef260ad4afec4",
+          "viewId":"1j0ddsesdfsfdo0m7",
+          "type":"view",
+          "lastEvent":1326500821237,
+          "time":1326500825084,
+          "data":{"total":1054078}
+        }
+      }
+    ]
+  }),
+
+  errorData = JSON.stringify({
+    error: "not_found",
+    reason: "missing"
+  })
 
   beforeEach(function() {
     couchStorage = new CouchStorage();  
@@ -33,10 +58,8 @@ describe('CouchStorage', function() {
 
   describe('.deleteView', function() {
     it('should call deleteDocument', function() {
-      var data = '{"total_rows":40,"offset":2,"rows":[{"id":"e9f59b5f8c965ebce700eeec1baf7a60","key":["1j0ddsesdfsfdo0m7",1326500825084],"value":{"_id":"e9f59b5f8c965ebce700eeec1baf7a60","_rev":"1-0145acc24d7c96db4d8ef260ad4afec4","viewId":"1j0ddsesdfsfdo0m7","type":"view","lastEvent":1326500821237,"time":1326500825084,"data":{"total":1054078}}}]}';
-
       spyOn(couchStorage, 'request').andCallFake(function(id, callback) {
-        callback(data);
+        callback(validData);
       })
 
       spyOn(couchStorage, 'deleteDocument');
@@ -49,10 +72,8 @@ describe('CouchStorage', function() {
     })
 
     it('should not call deleteDocument if no previous view exists', function() {
-      var data = '{"error":"not_found","reason":"missing"}';
-
       spyOn(couchStorage, 'request').andCallFake(function(id, callback) {
-        callback(data);
+        callback(errorData);
       })
 
       spyOn(couchStorage, 'deleteDocument');
@@ -74,12 +95,11 @@ describe('CouchStorage', function() {
     })
 
     it('should return null if view doesnt exist', function() {
-      var data = '{"error":"not_found","reason":"missing"}',
-          foo = {f: function() {}};
+      var foo = {f: function() {}};
 
       spyOn(foo, 'f');
       spyOn(couchStorage, 'request').andCallFake(function(id, callback) {
-        callback(data);
+        callback(errorData);
       })
 
       couchStorage.loadView('f8s7h5dggs', foo.f);      
@@ -88,12 +108,11 @@ describe('CouchStorage', function() {
     })
 
     it('should parse the returned data', function() {
-      var data = '{"total_rows":40,"offset":2,"rows":[{"id":"e9f59b5f8c965ebce700eeec1baf7a60","key":["1j0ddsesdfsfdo0m7",1326500825084],"value":{"_id":"e9f59b5f8c965ebce700eeec1baf7a60","_rev":"1-0145acc24d7c96db4d8ef260ad4afec4","viewId":"1j0ddsesdfsfdo0m7","type":"view","lastEvent":1326500821237,"time":1326500825084,"data":{"total":1054078}}}]}',
-          foo = {f: function() {}};
+      var foo = {f: function() {}};
 
       spyOn(foo, 'f');
       spyOn(couchStorage, 'request').andCallFake(function(id, callback) {
-        callback(data);
+        callback(validData);
       })
 
       couchStorage.loadView('f8s7h5dggs', foo.f);      
