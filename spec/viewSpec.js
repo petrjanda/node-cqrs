@@ -108,42 +108,47 @@ describe('View', function() {
         expect( view.apply ).toHaveBeenCalledWith( event, jasmine.any(Function) );    
       })
 
-      it( 'should store view if events increment was loaded', function() {
+      describe( 'snapshooting', function() {
         var event = {foo: 'bar'};
 
-        spyOn(view, 'apply').andCallFake(function(event, callback) { 
-          callback() 
-        });
+        beforeEach(function() {
+          spyOn(view, 'apply').andCallFake(function(event, callback) { 
+            callback() 
+          });
 
-        repository.getEventsByName.andCallFake(function(names, from, callback) {
-          callback([event]);
-        }); 
+          spyOn(storage, 'storeView');
+        })
 
-        spyOn(storage, 'storeView');
+        function fakeGetEvents(events) {
+          repository.getEventsByName.andCallFake(function(names, from, callback) {
+            callback(events);
+          }); 
+        }
 
-        view.load();
+        it( 'should store view if events increment was loaded', function() {
+          fakeGetEvents([event]);
 
-        expect( storage.storeView ).toHaveBeenCalledWith(view);  
-      })
+          view.load();
 
-      it( 'should not store view if snapshooting is disabled', function() {
-        var event = {foo: 'bar'};
+          expect( storage.storeView ).toHaveBeenCalledWith(view);  
+        })
 
-        spyOn(view, 'apply').andCallFake(function(event, callback) { 
-          callback() 
-        });
-        
-        repository.getEventsByName.andCallFake(function(names, from, callback) {
-          callback([event]);
-        }); 
+        it( 'should not store view if no events were loaded', function() {
+          fakeGetEvents([]); 
 
-        spyOn(storage, 'storeView');
+          view.load();
 
-        view.snapshots = false;
+          expect( storage.storeView ).not.toHaveBeenCalledWith(view);  
+        })
 
-        view.load();
+        it( 'should not store view if snapshooting is disabled', function() {
+          fakeGetEvents([event]);
+          view.snapshots = false;
 
-        expect( storage.storeView ).not.toHaveBeenCalled();
+          view.load();
+
+          expect( storage.storeView ).not.toHaveBeenCalled();
+        })
       })
 
       it( 'should call callback if specified', function() {
