@@ -14,7 +14,8 @@
     "test": "./jasmine-node spec/"
   },
   "dependencies": {
-    "microtime": "0.2.0"
+    "microtime": "0.2.0",
+    "nano": "*"
   },
   "devDependencies": {
     "jasmine-node": "*"
