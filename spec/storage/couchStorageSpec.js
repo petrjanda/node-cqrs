@@ -31,6 +31,16 @@ describe('CouchStorage', function() {
     })
   })
 
+  describe('.storeView', function() {
+    it('should call deleteDocument', function() {
+      spyOn(couchStorage, 'deleteDocument');
+
+      couchStorage.purgeView(1);
+
+      expect(couchStorage.deleteDocument).toHaveBeenCalledWith(1);
+    })
+  })
+
   describe('.loadView', function() {
     it('should call request', function() {
       spyOn(couchStorage, 'request');
