@@ -17,6 +17,7 @@
     "microtime": "0.2.0"
   },
   "devDependencies": {
-    "jasmine-node": "*"
+    "jasmine-node": "*",
+    "express": ">= 2.5.6"
   }
 }
