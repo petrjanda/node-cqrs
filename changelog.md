@@ -1,3 +1,6 @@
+## v0.4.7
+* first piece of code migrated to nano
+
 ## v0.4.6
 * view purge previous snapshot while new is taken, so it optimize database usage
 
