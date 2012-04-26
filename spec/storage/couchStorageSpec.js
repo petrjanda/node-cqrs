@@ -47,6 +47,21 @@ describe('CouchStorage', function() {
       expect(couchStorage.request).toHaveBeenCalledWith({ method : 'GET', path : '/cqrs/_design/cqrs/_view/viewSnapshot?startkey=["1j0ddsesdfsfdo0m7",999999999999999999]&endkey=["1j0ddsesdfsfdo0m7",0]&limit=1&descending=true' }, jasmine.any(Function));
       expect(couchStorage.deleteDocument).toHaveBeenCalledWith('e9f59b5f8c965ebce700eeec1baf7a60');
     })
+
+    it('should not call deleteDocument if no previous view exists', function() {
+      var data = '{"error":"not_found","reason":"missing"}';
+
+      spyOn(couchStorage, 'request').andCallFake(function(id, callback) {
+        callback(data);
+      })
+
+      spyOn(couchStorage, 'deleteDocument');
+
+      couchStorage.purgeView('1j0ddsesdfsfdo0m7');
+
+      expect(couchStorage.request).toHaveBeenCalledWith({ method : 'GET', path : '/cqrs/_design/cqrs/_view/viewSnapshot?startkey=["1j0ddsesdfsfdo0m7",999999999999999999]&endkey=["1j0ddsesdfsfdo0m7",0]&limit=1&descending=true' }, jasmine.any(Function));
+      expect(couchStorage.deleteDocument).not.toHaveBeenCalled();
+    })
   })
 
   describe('.loadView', function() {
