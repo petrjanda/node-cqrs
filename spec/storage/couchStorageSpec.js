@@ -62,6 +62,10 @@ describe('CouchStorage', function() {
     })  
   }
 
+  function viewPath(id) {
+    return '/cqrs/_design/cqrs/_view/viewSnapshot?startkey=["' + id + '",999999999999999999]&endkey=["' + id + '",0]&limit=1&descending=true'
+  }
+
   describe('.deleteView', function() {
     it('should call deleteDocument', function() {
       fakeRequest(validData);
@@ -69,8 +73,12 @@ describe('CouchStorage', function() {
 
       couchStorage.purgeView('1j0ddsesdfsfdo0m7');
 
-      expect(couchStorage.request).toHaveBeenCalledWith({ method : 'GET', path : '/cqrs/_design/cqrs/_view/viewSnapshot?startkey=["1j0ddsesdfsfdo0m7",999999999999999999]&endkey=["1j0ddsesdfsfdo0m7",0]&limit=1&descending=true' }, jasmine.any(Function));
       expect(couchStorage.deleteDocument).toHaveBeenCalledWith('e9f59b5f8c965ebce700eeec1baf7a60');
+      expect(couchStorage.request).toHaveBeenCalledWith({ 
+        method : 'GET', 
+        path : viewPath('1j0ddsesdfsfdo0m7') }, 
+        jasmine.any(Function)
+      );
     })
 
     it('should not call deleteDocument if no previous view exists', function() {
@@ -79,8 +87,11 @@ describe('CouchStorage', function() {
 
       couchStorage.purgeView('1j0ddsesdfsfdo0m7');
 
-      expect(couchStorage.request).toHaveBeenCalledWith({ method : 'GET', path : '/cqrs/_design/cqrs/_view/viewSnapshot?startkey=["1j0ddsesdfsfdo0m7",999999999999999999]&endkey=["1j0ddsesdfsfdo0m7",0]&limit=1&descending=true' }, jasmine.any(Function));
       expect(couchStorage.deleteDocument).not.toHaveBeenCalled();
+      expect(couchStorage.request).toHaveBeenCalledWith({
+        method : 'GET', 
+        path : viewPath('1j0ddsesdfsfdo0m7') }, 
+        jasmine.any(Function));
     })
   })
 
@@ -91,7 +102,10 @@ describe('CouchStorage', function() {
 
       couchStorage.loadView('f4f5g8e76tko');
 
-      expect(couchStorage.request).toHaveBeenCalledWith({ method : 'GET', path : '/cqrs/_design/cqrs/_view/viewSnapshot?startkey=["f4f5g8e76tko",999999999999999999]&endkey=["f4f5g8e76tko",0]&limit=1&descending=true' }, jasmine.any(Function));
+      expect(couchStorage.request).toHaveBeenCalledWith({ 
+        method : 'GET', 
+        path : viewPath('f4f5g8e76tko') }, 
+        jasmine.any(Function));
     })
 
     it('should return null if view doesnt exist', function() {
