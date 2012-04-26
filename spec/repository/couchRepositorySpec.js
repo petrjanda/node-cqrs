@@ -1,4 +1,5 @@
 var http = require('http'),
+    utils = require('../../lib/utils'),
     jasmine = require('jasmine-node'),
     CouchDb = require('../../lib/repository/couchRepository'),
     EventEmitter = require('events').EventEmitter;
@@ -44,11 +45,11 @@ describe('CouchRepository', function() {
   describe('storeEvent', function() {
     it('should call create document', function() {
       spyOn(couchdb, 'createDocument');
-      spyOn(Date.prototype, 'getTime').andCallFake(function() { return 123456; })
+      spyOn(utils, 'uuid').andCallFake(function() { return 123456; })
 
       couchdb.storeEvent(1, 'user:created', {foo: 'bar'});
 
-      expect(couchdb.createDocument).toHaveBeenCalledWith(JSON.stringify({
+      expect(couchdb.createDocument).toHaveBeenCalledWith(123456, JSON.stringify({
         aggregateId: 1,
         name: 'user:created',
         type: 'event',
@@ -59,7 +60,7 @@ describe('CouchRepository', function() {
 
     it('should trigger callback if specified', function() {
       var foo = {f: function() {}}
-      spyOn(couchdb, 'createDocument').andCallFake(function(data, callback) { callback() })
+      spyOn(couchdb, 'createDocument').andCallFake(function(id, data, callback) { callback() })
       spyOn(foo, 'f');
 
       couchdb.storeEvent(1, 'user:created', {foo: 'bar'}, foo.f);

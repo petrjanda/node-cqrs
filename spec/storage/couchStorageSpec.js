@@ -1,4 +1,5 @@
 var CouchStorage = require('../../lib/storage/couchStorage'),
+    utils = require('../../lib/utils'),
     jasmine = require('jasmine-node');
 
 describe('CouchStorage', function() {
@@ -58,11 +59,11 @@ describe('CouchStorage', function() {
     it('should call createDocument', function() {
       var view = {uid: 1, lastEvent: 12, data: 'foo'};
       spyOn(couchStorage, 'createDocument');
-      spyOn(Date.prototype, 'getTime').andCallFake(function() { return 123456; })
+      spyOn(utils, 'uuid').andReturn(123456);
 
       couchStorage.storeView(view);
 
-      expect(couchStorage.createDocument).toHaveBeenCalledWith('{"viewId":1,"type":"view","lastEvent":12,"time":123456,"data":"foo"}');
+      expect(couchStorage.createDocument).toHaveBeenCalledWith(123456, '{"viewId":1,"type":"view","lastEvent":12,"time":123456,"data":"foo"}');
     })
   })
 
