@@ -21,17 +21,16 @@ describe('couchdb', function() {
   describe('createDocument', function() {
     it('should call proper request', function() {
       var callback = function() {},
-          data = JSON.stringify({ foo: 'bar' }),
-          options = { path: '/cqrs/1234', method: 'PUT', data: data };
+          data = JSON.stringify({ foo: 'bar' });
 
-      spyOn(couchdb, 'request');
+      spyOn(couchdb._db, 'insert');
       spyOn(couchdb, 'getUuid').andCallFake(function(callback) {
         callback('1234');
       })
       
       couchdb.createDocument(data, callback);
 
-      expect(couchdb.request).toHaveBeenCalledWith(options, callback);
+      expect(couchdb._db.insert).toHaveBeenCalledWith(data, '1234', callback);
     })
   })
 
