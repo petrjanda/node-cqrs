@@ -116,6 +116,7 @@ describe('View', function() {
             callback() 
           });
 
+          spyOn(storage, 'purgeView');
           spyOn(storage, 'storeView');
         })
 
@@ -125,13 +126,24 @@ describe('View', function() {
           }); 
         }
 
-        it( 'should store view if events increment was loaded', function() {
-          fakeGetEvents([event]);
+        describe( 'with events increment', function() {
+          it( 'should store view if events increment was loaded', function() {
+            fakeGetEvents([event]);
 
-          view.load();
+            view.load();
 
-          expect( storage.storeView ).toHaveBeenCalledWith(view);  
+            expect( storage.storeView ).toHaveBeenCalledWith(view);  
+          })
+
+          it( 'should store view if events increment was loaded', function() {
+            fakeGetEvents([event]);
+
+            view.load();
+
+            expect( storage.purgeView ).toHaveBeenCalledWith(view.uid);
+          })
         })
+
 
         it( 'should not store view if no events were loaded', function() {
           fakeGetEvents([]); 
