@@ -1,3 +1,6 @@
+## v0.4.6
+* view purge previous snapshot while new is taken, so it optimize database usage
+
 ## v0.4.5
 * fix the view store trigger conditions, disable view store if snapshots = false properly
 * fix the error response while view was loaded from the storage
