@@ -27,7 +27,17 @@ describe('CouchStorage', function() {
   errorData = JSON.stringify({
     error: "not_found",
     reason: "missing"
-  })
+  });
+
+  function fakeRequest(data) {
+    spyOn(couchStorage, 'request').andCallFake(function(id, callback) {
+      callback(data);
+    })  
+  }
+
+  function viewPath(id) {
+    return '/cqrs/_design/cqrs/_view/viewSnapshot?startkey=["' + id + '",999999999999999999]&endkey=["' + id + '",0]&limit=1&descending=true'
+  }
 
   beforeEach(function() {
     couchStorage = new CouchStorage();  
@@ -55,16 +65,6 @@ describe('CouchStorage', function() {
       expect(couchStorage.createDocument).toHaveBeenCalledWith('{"viewId":1,"type":"view","lastEvent":12,"time":123456,"data":"foo"}');
     })
   })
-
-  function fakeRequest(data) {
-    spyOn(couchStorage, 'request').andCallFake(function(id, callback) {
-      callback(data);
-    })  
-  }
-
-  function viewPath(id) {
-    return '/cqrs/_design/cqrs/_view/viewSnapshot?startkey=["' + id + '",999999999999999999]&endkey=["' + id + '",0]&limit=1&descending=true'
-  }
 
   describe('.deleteView', function() {
     it('should call deleteDocument', function() {
