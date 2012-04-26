@@ -31,13 +31,21 @@ describe('CouchStorage', function() {
     })
   })
 
-  describe('.storeView', function() {
+  describe('.deleteView', function() {
     it('should call deleteDocument', function() {
+      var data = '{"total_rows":40,"offset":2,"rows":[{"id":"e9f59b5f8c965ebce700eeec1baf7a60","key":["1j0ddsesdfsfdo0m7",1326500825084],"value":{"_id":"e9f59b5f8c965ebce700eeec1baf7a60","_rev":"1-0145acc24d7c96db4d8ef260ad4afec4","viewId":"1j0ddsesdfsfdo0m7","type":"view","lastEvent":1326500821237,"time":1326500825084,"data":{"total":1054078}}}]}';
+
+      spyOn(couchStorage, 'request').andCallFake(function(id, callback) {
+        callback(data);
+      })
+
       spyOn(couchStorage, 'deleteDocument');
 
-      couchStorage.purgeView(1);
+      couchStorage.purgeView('1j0ddsesdfsfdo0m7');
 
-      expect(couchStorage.deleteDocument).toHaveBeenCalledWith(1);
+
+      expect(couchStorage.request).toHaveBeenCalledWith({ method : 'GET', path : '/cqrs/_design/cqrs/_view/viewSnapshot?startkey=["1j0ddsesdfsfdo0m7",999999999999999999]&endkey=["1j0ddsesdfsfdo0m7",0]&limit=1&descending=true' }, jasmine.any(Function));
+      expect(couchStorage.deleteDocument).toHaveBeenCalledWith('e9f59b5f8c965ebce700eeec1baf7a60');
     })
   })
 
