@@ -1,4 +1,5 @@
 var http = require('http'),
+    nano = require('nano'),
     jasmine = require('jasmine-node'),
     CouchDb = require('../../lib/util/couchdb'),
     EventEmitter = require('events').EventEmitter;
@@ -11,18 +12,10 @@ describe('couchdb', function() {
   })
 
   describe('constructor', function() {
-
-    it('should store database name', function() {
-      expect(couchdb.database).toEqual('cqrs');
+    it('should create nano instance with given attributes', function() {
+      expect(couchdb._db.config.url).toEqual('http://localhost:5984');
+      expect(couchdb._db.config.db).toEqual('cqrs');
     })
-
-    it('host should be default to localhost', function() {
-      expect(couchdb.options.host).toEqual('localhost');
-    })
-
-    it('port should be default to localhost', function() {
-      expect(couchdb.options.port).toEqual(5984);
-    })    
   })
 
   describe('createDocument', function() {
