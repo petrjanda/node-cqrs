@@ -42,6 +42,19 @@ describe('couchdb', function() {
     })
   })
 
+  describe('deleteDocument', function() {
+    it('should call proper request', function() {
+      var callback = function() {},
+          options = { path: '/cqrs/1234', method: 'DELETE'};
+
+      spyOn(couchdb, 'request');
+      
+      couchdb.deleteDocument(1234, callback);
+
+      expect(couchdb.request).toHaveBeenCalledWith(options, callback);
+    })
+  })
+
   describe('getUuid', function() {
     it('should call proper request', function() {
       var options = {
