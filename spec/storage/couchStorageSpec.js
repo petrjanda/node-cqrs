@@ -41,17 +41,17 @@ describe('CouchStorage', function() {
   }
 
   beforeEach(function() {
-    couchStorage = new CouchStorage();  
+    couchStorage = CouchStorage.createStorage();  
   })
 
   describe('instance', function() {
     it('should get instance of CouchStorage', function() {
-      var couchStorage = CouchStorage.getInstance()
+      var couchStorage = CouchStorage.createStorage()
       expect(typeof couchStorage.request).toEqual('function');
     })
 
     it('should return just one instance', function() {
-      expect(CouchStorage.getInstance()).toEqual(CouchStorage.getInstance())
+      expect(CouchStorage.createStorage()).toEqual(CouchStorage.createStorage())
     })
   })
 
