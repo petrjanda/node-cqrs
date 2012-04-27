@@ -1,5 +1,5 @@
 var util = require('util'),
-    couchdb = require('../lib/repository/couchRepository').getInstance(),
+    couchdb = require('../lib/repository/couchRepository').createRepository(),
     repository = require('../lib/repository').getInstance(),
     Aggregate = require('../lib/aggregate');
 

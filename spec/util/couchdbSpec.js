@@ -8,7 +8,7 @@ describe('couchdb', function() {
   var couchdb;
 
   beforeEach(function() {
-    couchdb = new CouchDb('cqrs');
+    couchdb = new CouchDb({database: 'cqrs'});
   })
 
   describe('constructor', function() {
@@ -63,8 +63,8 @@ describe('couchdb', function() {
 
     it('should call http.request with auth header if auth params are given', function() {
       var got;
-      couchdb.options.user = 'foo';
-      couchdb.options.password = 'bar';
+      couchdb.user = 'foo';
+      couchdb.password = 'bar';
 
       http.request.andCallFake(function(options, callback) {
         got = options.headers;
@@ -81,7 +81,11 @@ describe('couchdb', function() {
     it('should call http.request with valid params', function() {
       couchdb.request();
 
-      expect(http.request).toHaveBeenCalledWith(couchdb.options, jasmine.any(Function));
+      expect(http.request).toHaveBeenCalledWith({
+        host: 'localhost', 
+        port: 5984, 
+        method: 'GET', path : '/' 
+      }, jasmine.any(Function));
     })
 
     it('should setup proper default options', function() {
@@ -89,7 +93,12 @@ describe('couchdb', function() {
 
       couchdb.request();
 
-      expect(http.request).toHaveBeenCalledWith({method: 'GET', path: '/'}, jasmine.any(Function));
+      expect(http.request).toHaveBeenCalledWith({
+        host: 'localhost', 
+        port: 5984, 
+        method: 'GET',
+        path: '/' 
+      }, jasmine.any(Function));
     })
 
     it('should call post', function() {
@@ -97,7 +106,11 @@ describe('couchdb', function() {
 
       couchdb.request({method: 'POST'});
 
-      expect(http.request).toHaveBeenCalledWith({method: 'POST', path: '/'}, jasmine.any(Function));
+      expect(http.request).toHaveBeenCalledWith({
+        host: 'localhost', 
+        port: 5984, 
+        method: 'POST', 
+        path: '/' }, jasmine.any(Function));
     })    
 
     it('should call proper url', function() {
@@ -105,7 +118,11 @@ describe('couchdb', function() {
 
       couchdb.request({path: '/foo'});
 
-      expect(http.request).toHaveBeenCalledWith({method: 'GET', path: '/foo'}, jasmine.any(Function));
+      expect(http.request).toHaveBeenCalledWith({
+        host: 'localhost', 
+        port: 5984, 
+        method: 'GET', 
+        path: '/foo' }, jasmine.any(Function));
     }) 
 
     it('should end request', function() {

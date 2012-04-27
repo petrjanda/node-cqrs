@@ -8,22 +8,21 @@ describe('CouchRepository', function() {
   var couchdb;
 
   beforeEach(function() {
-    couchdb = new CouchDb('cqrs');
+    couchdb = CouchDb.createRepository({ database: 'cqrs' });
   })
 
-  describe('instance', function() {
+  describe('.createRepository', function() {
     it('should get instance of couchdb', function() {
-      var couchdb = CouchDb.getInstance()
+      var couchdb = CouchDb.createRepository({ database: 'cqrs' });
+
       expect(typeof couchdb._db).toEqual('object');
     })
 
     it('should return just one instance', function() {
-      var couch1 = CouchDb.getInstance(),
-          couch2 = CouchDb.getInstance();
+      var couch1 = CouchDb.createRepository({ database: 'cqrs' });
+          couch2 = CouchDb.createRepository({ database: 'cqrs' });
 
-      couch1.database = 'foobar';
-
-      expect(couch2.database).toEqual('foobar')
+      expect(couch1).toEqual(couch2);
     })
   })
 
@@ -34,11 +33,11 @@ describe('CouchRepository', function() {
     })
 
     it('host should be default to localhost', function() {
-      expect(couchdb.options.host).toEqual('localhost');
+      expect(couchdb.host).toEqual('localhost');
     })
 
     it('port should be default to localhost', function() {
-      expect(couchdb.options.port).toEqual(5984);
+      expect(couchdb.port).toEqual(5984);
     })    
   })
 
