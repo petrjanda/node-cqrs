@@ -37,7 +37,7 @@ describe('CouchStorage', function() {
   }
 
   function viewPath(id) {
-    return '/cqrs/_design/cqrs/_view/viewSnapshot?startkey=["' + id + '",999999999999999999]&endkey=["' + id + '",0]&limit=1&descending=true'
+    return '/cqrs/_design/cqrs/_view/viewSnapshot?startkey=["' + id + '","999999999999999999"]&endkey=["' + id + '","0"]&limit=1&descending=true'
   }
 
   beforeEach(function() {

@@ -76,7 +76,7 @@ describe('CouchRepository', function() {
 
       expect(couchdb.request).toHaveBeenCalledWith({
         method : 'GET',
-        path : '/cqrs/_design/cqrs/_view/aggregate?startkey=["1",0]&endkey=["1",9999999999999]'
+        path : '/cqrs/_design/cqrs/_view/aggregate?startkey=["1","0"]&endkey=["1","9999999999999999"]'
       }, jasmine.any(Function));
     })
 
@@ -105,7 +105,7 @@ describe('CouchRepository', function() {
 
       expect(couchdb.request).toHaveBeenCalledWith({
         method: 'GET', 
-        path: '/cqrs/_design/cqrs/_view/name?startkey=["foo",1000]&endkey=["foo",9999999999999]'
+        path: '/cqrs/_design/cqrs/_view/name?startkey=["foo","1000"]&endkey=["foo","9999999999999999"]'
       }, jasmine.any(Function));
     })
 
@@ -115,12 +115,12 @@ describe('CouchRepository', function() {
 
         expect(couchdb.request).toHaveBeenCalledWith({
           method: 'GET', 
-          path: '/cqrs/_design/cqrs/_view/name?startkey=["foo",0]&endkey=["foo",9999999999999]'
+          path: '/cqrs/_design/cqrs/_view/name?startkey=["foo","0"]&endkey=["foo","9999999999999999"]'
         }, jasmine.any(Function));
 
         expect(couchdb.request).toHaveBeenCalledWith({
           method: 'GET', 
-          path: '/cqrs/_design/cqrs/_view/name?startkey=["bar",0]&endkey=["bar",9999999999999]'
+          path: '/cqrs/_design/cqrs/_view/name?startkey=["bar","0"]&endkey=["bar","9999999999999999"]'
         }, jasmine.any(Function));
       })
 
