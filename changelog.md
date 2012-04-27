@@ -1,3 +1,7 @@
+## v0.4.9
+* create storage in view on runtime, to fix prematurely created singleton instance
+* fetch views by changed string keys
+
 ## v0.4.8
 * refactoring internals of couchdb utility
 * refactoring couch repository and couch storage to reuse new internal implementation of couchdb utility
