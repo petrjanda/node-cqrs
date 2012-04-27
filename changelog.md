@@ -1,3 +1,9 @@
+## v0.4.8
+* refactoring internals of couchdb utility
+* refactoring couch repository and couch storage to reuse new internal implementation of couchdb utility
+* dropped couchRepository.getInstance and couchStorage.getInstance
+* introduced .createRepository and createStorage methods, which are the ones exported by according modules to better ensure only one instance is created.
+
 ## v0.4.7
 * first piece of code migrated to nano
 
