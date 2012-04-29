@@ -63,7 +63,7 @@ describe('CouchStorage', function() {
 
       couchStorage.storeView(view);
 
-      expect(couchStorage.createDocument).toHaveBeenCalledWith(123456, '{"viewId":1,"type":"view","lastEvent":12,"time":123456,"data":"foo"}');
+      expect(couchStorage.createDocument).toHaveBeenCalledWith(123456, {viewId:1,type:"view",lastEvent:12,time:123456,data:"foo"});
     })
   })
 
@@ -74,7 +74,7 @@ describe('CouchStorage', function() {
 
       couchStorage.purgeView('1j0ddsesdfsfdo0m7');
 
-      expect(couchStorage.deleteDocument).toHaveBeenCalledWith('e9f59b5f8c965ebce700eeec1baf7a60');
+      expect(couchStorage.deleteDocument).toHaveBeenCalledWith('e9f59b5f8c965ebce700eeec1baf7a60', '1-0145acc24d7c96db4d8ef260ad4afec4');
       expect(couchStorage.request).toHaveBeenCalledWith({ 
         method : 'GET', 
         path : viewPath('1j0ddsesdfsfdo0m7') }, 

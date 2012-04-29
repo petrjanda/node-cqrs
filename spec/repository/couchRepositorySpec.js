@@ -48,13 +48,13 @@ describe('CouchRepository', function() {
 
       couchdb.storeEvent(1, 'user:created', {foo: 'bar'});
 
-      expect(couchdb.createDocument).toHaveBeenCalledWith(123456, JSON.stringify({
+      expect(couchdb.createDocument).toHaveBeenCalledWith(123456, {
         aggregateId: 1,
         name: 'user:created',
         type: 'event',
         time: 123456,
         attrs: {foo: 'bar'}
-      }), jasmine.any(Function));
+      }, jasmine.any(Function));
     })
 
     it('should trigger callback if specified', function() {
