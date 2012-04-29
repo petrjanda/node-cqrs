@@ -1,3 +1,8 @@
+## v0.4.10
+* fix view purging and storing order so only new snapshot is kept in database (previous one is purged)
+* fix view saving
+* fix view deleting 
+
 ## v0.4.9
 * create storage in view on runtime, to fix prematurely created singleton instance
 * fetch views by changed string keys
