@@ -173,6 +173,53 @@ describe('View', function() {
       })
     })
   })
+
+  describe('.load', function() {
+
+    it('should load data from storage', function() {
+      spyOn(storage, 'loadView');
+      view.uid = '45fsgs45gh';
+
+      view.load();
+
+      expect(storage.loadView).toHaveBeenCalledWith('45fsgs45gh', jasmine.any(Function));
+    })
+
+    describe('callback', function() {
+      
+      beforeEach(function() {
+        spyOn(storage, 'loadView').andCallFake(function(uid, callback) {
+          callback({
+            uid : 'f8s7h5dggs', 
+            lastEvent : 1325721336913, 
+            data : { foo : 'bar' }
+          })
+        })
+      })
+
+      it('should store data to the view', function() {
+        view.load();
+
+        expect(view.data).toEqual({ foo : 'bar' })
+      })
+
+      it('should store data to the view', function() {
+        view.load();
+
+        expect(view.lastEvent).toEqual(1325721336913);
+      })
+
+
+      it( 'should call callback if specified', function() {
+        this.handler = function() {}
+        spyOn( this, 'handler')
+
+        view.load(this.handler);
+
+        expect( this.handler ).toHaveBeenCalled();  
+      })
+    })
+  })
   
   describe('.apply', function() {
 
