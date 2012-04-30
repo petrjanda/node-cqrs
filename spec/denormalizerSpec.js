@@ -38,28 +38,28 @@ describe('Denormalizer', function() {
   })
 
   describe('#updateViews', function() {
-    it('should trigger .load function for all registered views', function() {
+    it('should trigger .build function for all registered views', function() {
       var view = new View('foo', ['bar', 'baz']);
-      spyOn(view, 'load');
+      spyOn(view, 'build');
 
       denormalizer.registerView(view);
 
       denormalizer.updateViews('baz');
 
-      expect(view.load).toHaveBeenCalled();
+      expect(view.build).toHaveBeenCalled();
     })
   })
 
   describe('#build', function() {
     it('should trigger .load function for the view if exists', function() {
       var view = new View('foo', ['bar', 'baz']);
-      spyOn(view, 'load');
+      spyOn(view, 'build');
 
       denormalizer.registerView(view);
 
       denormalizer.build('foo');
 
-      expect(view.load).toHaveBeenCalled();
+      expect(view.build).toHaveBeenCalled();
     })
 
     it('should throw exception if view doesnt exist', function() {

@@ -31,13 +31,13 @@ describe('View', function() {
     })
   })
 
-  describe('.load', function() {
+  describe('.build', function() {
 
     describe('with disabled storage', function() {
       it('should directly call getEventsByName', function() {
         view.snapshots = false;
 
-        view.load();
+        view.build();
 
         expect(repository.getEventsByName).toHaveBeenCalledWith( 'foo', 1, jasmine.any(Function) );;
       })      
@@ -47,7 +47,7 @@ describe('View', function() {
       spyOn(storage, 'loadView');
       view.uid = '45fsgs45gh';
 
-      view.load();
+      view.build();
 
       expect(storage.loadView).toHaveBeenCalledWith('45fsgs45gh', jasmine.any(Function));
     })
@@ -57,7 +57,7 @@ describe('View', function() {
         spyOn(storage, 'loadView');
         view.uid = '45fsgs45gh';
 
-        view.load(true);
+        view.build(true);
 
         expect(storage.loadView).not.toHaveBeenCalled();
       })
@@ -76,20 +76,20 @@ describe('View', function() {
       })
 
       it('should store data to the view', function() {
-        view.load();
+        view.build();
 
         expect(view.data).toEqual({ foo : 'bar' })
       })
 
       it('should store data to the view', function() {
-        view.load();
+        view.build();
 
         expect(view.lastEvent).toEqual(1325721336913);
       })
 
 
       it('should load events increment data from repository', function() {
-        view.load();
+        view.build();
 
         expect(repository.getEventsByName).toHaveBeenCalledWith( 'foo', 1325721336914, jasmine.any(Function) );
       })
@@ -103,7 +103,7 @@ describe('View', function() {
           callback([event]);
         }); 
 
-        view.load();
+        view.build();
 
         expect( view.apply ).toHaveBeenCalledWith( event, jasmine.any(Function) );    
       })
@@ -130,7 +130,7 @@ describe('View', function() {
           it( 'should store view if events increment was loaded', function() {
             fakeGetEvents([event]);
 
-            view.load();
+            view.build();
 
             expect( storage.storeView ).toHaveBeenCalledWith(view);  
           })
@@ -138,7 +138,7 @@ describe('View', function() {
           it( 'should store view if events increment was loaded', function() {
             fakeGetEvents([event]);
 
-            view.load();
+            view.build();
 
             expect( storage.purgeView ).toHaveBeenCalledWith(view.uid);
           })
@@ -148,7 +148,7 @@ describe('View', function() {
         it( 'should not store view if no events were loaded', function() {
           fakeGetEvents([]); 
 
-          view.load();
+          view.build();
 
           expect( storage.storeView ).not.toHaveBeenCalledWith(view);  
         })
@@ -157,7 +157,7 @@ describe('View', function() {
           fakeGetEvents([event]);
           view.snapshots = false;
 
-          view.load();
+          view.build();
 
           expect( storage.storeView ).not.toHaveBeenCalled();
         })
@@ -167,7 +167,7 @@ describe('View', function() {
         this.handler = function() {}
         spyOn( this, 'handler')
 
-        view.load(this.handler);
+        view.build(this.handler);
 
         expect( this.handler ).toHaveBeenCalled();  
       })
