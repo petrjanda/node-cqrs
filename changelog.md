@@ -1,3 +1,8 @@
+## v0.5.0
+* separate view .load and .build functions (load use only snapshots, build use events increment as well)
+* new version of setup methods for both repository and storage
+* fixed global variable bug in views parallel processing
+
 ## v0.4.10
 * fix view purging and storing order so only new snapshot is kept in database (previous one is purged)
 * fix view saving
