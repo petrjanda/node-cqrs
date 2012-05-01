@@ -209,15 +209,26 @@ describe('View', function() {
         expect(view.lastEvent).toEqual(1325721336913);
       })
 
+      describe('callback', function() {
+        it( 'should be called if specified', function() {
+          this.handler = function() {}
+          spyOn( this, 'handler')
 
-      it( 'should call callback if specified', function() {
-        this.handler = function() {}
-        spyOn( this, 'handler')
+          view.load(this.handler);
 
-        view.load(this.handler);
+          expect( this.handler ).toHaveBeenCalledWith();  
+        })
 
-        expect( this.handler ).toHaveBeenCalled();  
+        it( 'should be called with proper binding', function() {
+          var self = null;
+          this.handler = function() { self = this; }
+
+          view.load(this.handler);
+
+          expect(self).toEqual(view);  
+        })
       })
+
     })
   })
   
