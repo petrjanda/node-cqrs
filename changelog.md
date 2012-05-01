@@ -1,3 +1,6 @@
+## v0.5.1
+* fix view callback binding
+
 ## v0.5.0
 * separate view .load and .build functions (load use only snapshots, build use events increment as well)
 * new version of setup methods for both repository and storage
