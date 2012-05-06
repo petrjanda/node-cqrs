@@ -39,6 +39,19 @@ describe('Denormalizer', function() {
 
   describe('#updateViews', function() {
     it('should trigger .build function for all registered views', function() {
+      var view = new View('foo', []);
+      spyOn(view, 'build');
+
+      denormalizer.registerView(view);
+
+      denormalizer.updateAllViews();
+
+      expect(view.build).toHaveBeenCalled();
+    })
+  })
+
+  describe('#updateAllViews', function() {
+    it('should trigger .build function for all registered views', function() {
       var view = new View('foo', ['bar', 'baz']);
       spyOn(view, 'build');
 
