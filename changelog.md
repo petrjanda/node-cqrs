@@ -1,3 +1,6 @@
+## v0.5.2
+* add .updateAllViews method to denormalizer
+
 ## v0.5.1
 * fix view callback binding
 
