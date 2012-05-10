@@ -10,7 +10,7 @@ describe('Denormalizer', function() {
   describe('#registerView', function() {
 
     it('should store view in the list of views', function() {
-      var view = new View('foo', ['bar', 'baz']);
+      var view = new ViewBuilder('foo', ['bar', 'baz']);
 
       denormalizer.registerView(view);
 
@@ -18,7 +18,7 @@ describe('Denormalizer', function() {
     })
 
     it('should store view to the events map', function() {
-      var view = new View('foo', ['bar', 'baz']);
+      var view = new ViewBuilder('foo', ['bar', 'baz']);
 
       denormalizer.registerView(view);
 
@@ -27,7 +27,7 @@ describe('Denormalizer', function() {
     })
 
     it('should throw an exception if the view already exists', function() {
-      var view = new View('foo', ['bar', 'baz']);
+      var view = new ViewBuilder('foo', ['bar', 'baz']);
 
       denormalizer.registerView(view);
 
@@ -39,7 +39,7 @@ describe('Denormalizer', function() {
 
   describe('#updateViews', function() {
     it('should trigger .build function for all registered views', function() {
-      var view = new View('foo', []);
+      var view = new ViewBuilder('foo', []);
       spyOn(view, 'build');
 
       denormalizer.registerView(view);
@@ -52,7 +52,7 @@ describe('Denormalizer', function() {
 
   describe('#updateAllViews', function() {
     it('should trigger .build function for all registered views', function() {
-      var view = new View('foo', ['bar', 'baz']);
+      var view = new ViewBuilder('foo', ['bar', 'baz']);
       spyOn(view, 'build');
 
       denormalizer.registerView(view);
@@ -65,7 +65,7 @@ describe('Denormalizer', function() {
 
   describe('#build', function() {
     it('should trigger .load function for the view if exists', function() {
-      var view = new View('foo', ['bar', 'baz']);
+      var view = new ViewBuilder('foo', ['bar', 'baz']);
       spyOn(view, 'build');
 
       denormalizer.registerView(view);
