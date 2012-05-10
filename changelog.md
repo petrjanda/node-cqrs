@@ -1,3 +1,6 @@
+## v0.5.3
+* separated View and ViewBuilder classes to separate view's building and reading process
+
 ## v0.5.2
 * add .updateAllViews method to denormalizer
 
