@@ -1,0 +1,35 @@
+info it worked if it ends with ok
+verbose cli [ 'node', '/usr/local/bin/npm', 'publish' ]
+info using npm@1.0.105
+info using node@v0.6.2
+verbose /usr/local/bin/node node symlink
+verbose config file /Users/petr/.npmrc
+verbose config file /usr/local/etc/npmrc
+verbose config file /usr/local/lib/node_modules/npm/npmrc
+verbose publish [ '.' ]
+verbose cache add [ '.', null ]
+silly cache add: name, spec, args [ undefined, '.', [ '.', null ] ]
+verbose parsed url { pathname: '.', path: '.', href: '.' }
+ERR! Could not install: .
+ERR! Error: Invalid 'version' field: 0.5.3.1
+ERR! 'version' Must be X.Y.Z, with an optional trailing tag.
+ERR! See the section on 'version' in `npm help json`
+ERR!     at /usr/local/lib/node_modules/npm/lib/utils/read-json.js:335:13
+ERR!     at /usr/local/lib/node_modules/npm/lib/utils/read-json.js:134:32
+ERR!     at P (/usr/local/lib/node_modules/npm/lib/utils/read-json.js:110:40)
+ERR!     at cb (/usr/local/lib/node_modules/npm/node_modules/graceful-fs/graceful-fs.js:36:9)
+ERR!     at [object Object].<anonymous> (fs.js:114:5)
+ERR!     at [object Object].emit (events.js:64:17)
+ERR!     at afterRead (fs.js:1081:12)
+ERR!     at Object.wrapper [as oncomplete] (fs.js:252:17)
+ERR! Report this *entire* log at:
+ERR!     <http://github.com/isaacs/npm/issues>
+ERR! or email it to:
+ERR!     <npm-@googlegroups.com>
+ERR! 
+ERR! System Darwin 10.8.0
+ERR! command "node" "/usr/local/bin/npm" "publish"
+ERR! cwd /Users/petr/development/node-cqrs
+ERR! node -v v0.6.2
+ERR! npm -v 1.0.105
+verbose exit [ 1, true ]
